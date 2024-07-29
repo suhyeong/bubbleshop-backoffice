@@ -1,0 +1,14 @@
+.manage-category-search-result-body {
+    margin-top: 20px;
+    justify-content: center;
+    align-content: center;
+}
+
+.manage-cate-btn-class {
+    display: flex;
+    justify-content: space-between;
+}
+
+.manage-cate-search-and-clear-btn {
+    margin-left: auto;
+}

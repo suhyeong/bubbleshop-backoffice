@@ -1,0 +1,35 @@
+.product-add-layout {
+    min-height: 100vh;
+}
+
+.product-add-layout-content{
+    padding: 16px 16px;
+}
+
+.product-add-card {
+    width: 100%;
+}
+
+.product-add-bottom-parent{
+    display: flex;
+    justify-content: end;
+    align-content: center;
+    margin-top: 15px;
+    padding-bottom: 15px;
+}
+
+.product-save-button {
+    margin-right: 15px;
+}
+
+.product-cancel-button {
+    margin-right: 15px;
+}
+
+.product-add-form-item {
+    margin: 0;
+}
+
+.product-add-form-select {
+    width: 100%;
+}

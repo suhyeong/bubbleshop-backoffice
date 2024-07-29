@@ -1,0 +1,19 @@
+.main-layout {
+    min-height: 100vh;
+}
+
+.main-header {
+    padding: 0;
+}
+
+.main-layout-content {
+    margin: 0 16px;
+}
+
+.main-layout-content-body {
+    padding: 24px;
+}
+
+.main-footer {
+    text-align: center;
+}

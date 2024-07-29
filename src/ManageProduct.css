@@ -1,0 +1,31 @@
+.menu-breadcrumb {
+    margin: 16px 0;
+}
+
+.form-col-class {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: auto;
+}
+
+.form-row-class {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.search-and-clear-btn-class {
+    text-align: right;
+}
+
+.prd-add-btn-class {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.manage-product-search-result-body {
+    margin-top: 20px;
+    justify-content: center;
+    align-content: center;
+}
