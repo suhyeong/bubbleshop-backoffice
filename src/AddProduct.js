@@ -48,7 +48,7 @@ function AddProduct() {
     }, []);
 
     // 썸네일 이미지 파일
-    const [thumbnailImageFile, setThumbnailImageFile] = useState('');
+    const [thumbnailImageFile, setThumbnailImageFile] = useState([]);
     // 상세 이미지 파일 리스트
     const [detailImageFiles, setDetailImageFiles] :UploadFile[] = useState([]);
 
@@ -71,7 +71,7 @@ function AddProduct() {
                 features: row['prd_features'],
                 options: options,
                 defaultOption: options[0],
-                thumbnailImageName: thumbnailImageFile.name,
+                thumbnailImageName: thumbnailImageFile[0].name,
                 detailImageName: detailImageFiles.map(file => file.name)
             }
 
@@ -190,7 +190,7 @@ function AddProduct() {
                                                        },
                                                    },
                                                ]}>
-                                        <AddProductOptionTag type='add' options={options} setOptions={setOptions} />
+                                        <AddProductOptionTag options={options} setOptions={setOptions} />
                                     </Form.Item>
                                 </Descriptions.Item>
                             </Descriptions>

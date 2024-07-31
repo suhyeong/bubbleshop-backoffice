@@ -16,6 +16,7 @@ export interface Product {
     subCategoryName: string,
     createdAt: string,
     price: number,
+    discountRate: number,
     imageList: ProductImage[],
     features: ProductFeature[],
     options: ProductOption[]

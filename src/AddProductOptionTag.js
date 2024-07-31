@@ -8,7 +8,7 @@ const tagInputStyle = {
     verticalAlign: 'top',
 };
 
-const AddProductOptionTag = ({type, options, setOptions}) => {
+const AddProductOptionTag = ({options, setOptions}) => {
     const inputRef = useRef(null);
     const editInputRef = useRef(null);
 
@@ -67,7 +67,6 @@ const AddProductOptionTag = ({type, options, setOptions}) => {
     };
 
     return (
-        type === 'add' ? (
         <Flex wrap>
             {options.map((tag, index) => {
                 if (editOptionIndex === index) {
@@ -86,18 +85,11 @@ const AddProductOptionTag = ({type, options, setOptions}) => {
                 }
                 const isLongTag = tag.length > 20;
                 const tagElem = (
-                    <Tag
-                        key={tag}
-                        color={index !== 0 ? 'default' : 'gold'}
-                        closable={true}
-                        style={{
-                            userSelect: 'none',
-                        }}
-                        onClose={() => deleteOption(tag)}
-                    >
-            <span onDoubleClick={(e) => handleDoubleClick(e, index, tag)}>
-              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-            </span>
+                    <Tag key={tag} color={index !== 0 ? 'default' : 'gold'} closable={true}
+                        style={{userSelect: 'none',}} onClose={() => deleteOption(tag)}>
+                        <span onDoubleClick={(e) => handleDoubleClick(e, index, tag)}>
+                          {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                        </span>
                     </Tag>
                 );
                 return isLongTag ? (
@@ -124,8 +116,7 @@ const AddProductOptionTag = ({type, options, setOptions}) => {
                     옵션 추가
                 </Tag>
             )}
-        </Flex>)
-            : (<div />)
+        </Flex>
     );
 }
 

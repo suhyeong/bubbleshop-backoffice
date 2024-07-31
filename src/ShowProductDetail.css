@@ -44,3 +44,23 @@
 .product-detail-form-select {
     width: 100%;
 }
+
+.product-detail-option-tag-card-content {
+    text-align: center;
+}
+
+.product-detail-option-tag-input {
+    width: 40%;
+    margin-inline-end: 8px;
+    vertical-align: top;
+}
+
+.product-detail-option-add-tag {
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.ant-input-number .ant-input-number-input {
+    text-align: center;
+}
