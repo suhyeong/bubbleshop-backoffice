@@ -17,6 +17,7 @@ export interface Product {
     createdAt: string,
     price: number,
     discountRate: number,
+    isSale: boolean,
     imageList: ProductImage[],
     features: ProductFeature[],
     options: ProductOption[]
@@ -25,7 +26,8 @@ export interface Product {
 export interface ProductImage {
     divCode: string,
     path: string,
-    fullUrl: string
+    fullUrl: string,
+    type: string
 }
 
 export interface ProductFeature {

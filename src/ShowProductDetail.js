@@ -1,4 +1,4 @@
-import {Button, Card, Form, Layout, Modal, Spin, theme, Typography} from "antd";
+import {Button, Card, Layout, Modal, Spin, theme, Typography, Tabs} from "antd";
 import "./ShowProductDetail.css";
 
 import ShowProductEssentialInfoDetail from "./ShowProductEssentialInfoDetail";
@@ -8,20 +8,8 @@ import {useParams} from 'react-router-dom';
 import {getResult} from "./AxiosResponse";
 import axios from "axios";
 import type {Product, ProductImage} from "./CommonInterface";
-import type {UploadFile} from "antd";
 
 const { Content } = Layout;
-
-const tabList = [
-    {
-        'key': 'essentialInfo',
-        'tab': '기본정보'
-    },
-    {
-        'key': 'imageInfo',
-        'tab': '이미지정보'
-    }
-];
 
 function ShowProductDetail() {
     const {
@@ -33,18 +21,12 @@ function ShowProductDetail() {
     const [loading, setLoading] = useState(true);
     const [result, setResult] = useState(null);
 
-    const [thumbnailImage, setThumbnailImage] = useState([]);
-    const [detailImages, setDetailImages] = useState([]);
-
     useEffect(() => {
         axios.get(`/product-proxy/product/v1/products/${prdCode}`)
             .then(response => {
                 const result:Product = response.data;
                 console.log(result);
                 setResult(result);
-                const prdImage: ProductImage[] = result.imageList;
-                defaultThumbnailFile(prdImage);
-                defaultDetailFile(prdImage);
                 setLoading(false);
             })
             .catch(error => {
@@ -54,49 +36,6 @@ function ShowProductDetail() {
                 window.close();
             });
     }, [prdCode]);
-
-    const defaultThumbnailFile = (prdImage) => {
-        const thumbImg: ProductImage[] = prdImage.filter(item => item.divCode === 'T');
-        if(thumbImg.length > 0) {
-            const file: UploadFile = {
-                uid: 0,
-                name: thumbImg[0].path,
-                status: 'done',
-                url: thumbImg[0].fullUrl
-            }
-            console.log(file);
-            setThumbnailImage([file]);
-        }
-    }
-
-    const defaultDetailFile = (prdImage) => {
-        const detailImg: ProductImage[] = prdImage.filter(item => item.divCode === 'F');
-        if(detailImg.length > 0) {
-            const newDetailImages: UploadFile[] = detailImg.map((item, index) => ({
-                uid: index+1,
-                name: item.path,
-                status: 'done',
-                url: item.fullUrl
-            }));
-            console.log(newDetailImages);
-            setDetailImages(newDetailImages);
-        }
-    }
-
-    const [form] = Form.useForm();
-    const [activeTab, setActiveTab] = useState('essentialInfo');
-
-    // 탭 변경시 수행 작업
-    const onTabChange = (key: string) => {
-        setActiveTab(key);
-    }
-
-    // [저장] 버튼 클릭시 수행 작업
-    const onSubmit = () => {
-        console.log(form.getFieldsValue());
-        console.log(thumbnailImage);
-        console.log(detailImages);
-    }
 
     // [삭제] 버튼 클릭시 모달 오픈 여부
     const [deleteModal, setDeleteModal] = useState(false);
@@ -126,42 +65,35 @@ function ShowProductDetail() {
         window.close();
     }
 
-    const getSaveButtonName = () => {
-        return tabList.find(item => item.key === activeTab).tab;
-    }
-
     return (
         <Layout className='product-management-detail'>
             <Content className='product-management-detail-content'>
                 <div style={{background: colorBgContainer, borderRadius: borderRadiusLG}}>
-                    <Form id={'prd-detail-form'} form={form} onFinish={onSubmit} encType={"multipart/form-data"}>
-                        <Card className='product-detail-card'
-                              title={<Typography.Title level={2} style={{ margin: 3 }}>상품 상세 정보 🔍</Typography.Title>}
-                              tabList={tabList}
-                              activeTabKey={activeTab}
-                              onTabChange={onTabChange}>
-                            {<Spin spinning={loading} tip="Loading" size="middle">
-                                {
-                                    activeTab === 'essentialInfo' && result && (
-                                        <ShowProductEssentialInfoDetail product={result} form={form} />
-                                    )
-                                }
-                                {
-                                    activeTab === 'imageInfo' && result && (
-                                        <ShowProductImageInfoDetail thumbnailImage={thumbnailImage} setThumbnailImage={setThumbnailImage}
-                                                                    detailImages={detailImages} setDetailImages={setDetailImages} />
-                                    )
-                                }
-                            </Spin>}
-                        </Card>
-                        <div>
-                            <div className="product-detail-bottom-parent">
-                                <Button className='product-detail-modify-button' type="primary" htmlType={"submit"}>{getSaveButtonName()} 수정</Button>
-                                <Button className='product-detail-delete-button' onClick={onDelete}>삭제</Button>
-                                <Button className='product-detail-cancel-button' onClick={onCancel}>취소</Button>
-                            </div>
-                        </div>
-                    </Form>
+                    <Card className='product-detail-card'
+                          title={<Typography.Title level={2} style={{ margin: 3 }}>상품 상세 정보 🔍</Typography.Title>}>
+                        <Spin spinning={loading} tip="Loading" size="middle">
+                            <Tabs
+                                type='card'
+                                size='large'
+                                items={[
+                                    {
+                                        key: 'essentialInfo',
+                                        label: '기본 정보',
+                                        children: result && <ShowProductEssentialInfoDetail product={result} />
+                                    },
+                                    {
+                                        key: 'imageInfo',
+                                        label: '이미지 정보',
+                                        children: result && <ShowProductImageInfoDetail productImage={result.imageList} />
+                                    }
+                                ]}>
+                            </Tabs>
+                        </Spin>
+                    </Card>
+                    <div className="product-detail-bottom-parent">
+                        <Button className='product-detail-delete-button' onClick={onDelete}>삭제</Button>
+                        <Button className='product-detail-cancel-button' onClick={onCancel}>취소</Button>
+                    </div>
                     <Modal
                         title="상품을 삭제하시겠습니까?" open={deleteModal}
                         onOk={onDeleteModalOK} onCancel={onDeleteModalCancel}

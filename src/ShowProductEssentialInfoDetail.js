@@ -1,26 +1,31 @@
-import {Form, Input, Descriptions, Select, Tag, InputNumber} from "antd";
+import {Button, Descriptions, Form, Input, InputNumber, Select, Switch, Tag} from "antd";
 import {ProductFeatures} from "./CommonInterface";
 import React, {useEffect, useState} from "react";
 import ShowProductOptionTag from "./ShowProductOptionTag";
+import axios from "axios";
+import {getResult} from "./AxiosResponse";
 
-function ShowProductEssentialInfoDetail({product, form}) {
+function ShowProductEssentialInfoDetail({product}) {
+    const [form] = Form.useForm();
     const productFeatures = ProductFeatures();
 
     // 옵션
     const [options, setOptions] = useState(product.options);
     // 태그(특징)
     const features = product.features.map(item => item.code);
+
+    const [originPrice, setOriginPrice] = useState(product.price);
+    const [discountRate, setDiscountRate] = useState(product.discountRate);
+
     // 할인율 적용 최종 금액
     const [finalPrice, setFinalPrice] = useState(0);
 
     useEffect(() => {
-        // 초기값으로 할인율 적용 금액 계산
-        calculateFinalPrice();
-    }, [product]);
+        // 금액, 할인율 달라질때마다 할인율 적용 금액 계산
+        calculateFinalPrice(originPrice, discountRate);
+    }, [originPrice, discountRate]);
 
-    const calculateFinalPrice = () => {
-        const price = form.getFieldValue('prd_price');
-        const discountRate = form.getFieldValue('prd_discount_rate');
+    const calculateFinalPrice = (price, discountRate) => {
         if (price != null && discountRate != null) {
             const discount = (price * (discountRate / 100));
             const final = price - discount;
@@ -28,8 +33,43 @@ function ShowProductEssentialInfoDetail({product, form}) {
         }
     };
 
+    const changePrice = (value) => {
+        setOriginPrice(value);
+    }
+
+    const changeDiscountRate = (value) => {
+        setDiscountRate(value);
+    }
+
+    // [저장] 버튼 클릭시 수행 작업
+    const onSubmit = async () => {
+        console.log(form.getFieldsValue());
+        console.log(options);
+
+        const row = await form.validateFields();
+        const request = {
+            features: row['prd_features'],
+            name: row['prd_name'],
+            engName: row['prd_eng_name'],
+            price: originPrice,
+            discount: discountRate,
+            isSale: row['prd_sale_yn'],
+            options: options
+        }
+
+        axios.put(`/product-proxy/product/v1/products/${product.productCode}`, request)
+            .then(response => {
+                getResult(response, "정상적으로 추가되었습니다.");
+                window.close();
+            })
+            .catch(error => {
+                console.error("데이터 저장시 에러가 발생했습니다. Error : ", error);
+                getResult(error.response, "상품 정보 저장시 에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            });
+    }
+
     return (
-        <div>
+        <Form id={'prd-detail-form'} form={form} onFinish={onSubmit}>
             <Descriptions style={{marginBottom: 20}} bordered>
                 <Descriptions.Item label='상품 코드' span={3}>
                     <Input key='prd_code' id='prd_code' disabled defaultValue={product.productCode}/>
@@ -52,20 +92,7 @@ function ShowProductEssentialInfoDetail({product, form}) {
                 <Descriptions.Item label={(<span>서브 카테고리<br />*서브 카테고리는 수정 불가합니다.</span>)} span={1.5}>
                     <Select className='product-detail-form-select' defaultValue={product.subCategoryCode} disabled options={[{value: product.subCategoryCode, label: product.subCategoryName}]} />
                 </Descriptions.Item>
-                <Descriptions.Item label='가격'>
-                    <Form.Item className='product-detail-form-item' id='prd_price_id' name='prd_price' initialValue={product.price}>
-                        <InputNumber addonAfter="₩" min="0" stringMode onChange={calculateFinalPrice}/>
-                    </Form.Item>
-                </Descriptions.Item>
-                <Descriptions.Item label='할인율'>
-                    <Form.Item className='product-detail-form-item' id='prd_discount_rate_id' name='prd_discount_rate' initialValue={product.discountRate}>
-                        <InputNumber addonAfter="%" min={0} max={100} parser={(value) => value?.replace('%', '')} onChange={calculateFinalPrice}/>
-                    </Form.Item>
-                </Descriptions.Item>
-                <Descriptions.Item label='할인율 적용 금액'>
-                    {finalPrice}₩
-                </Descriptions.Item>
-                <Descriptions.Item label='태그(특징)' span={3}>
+                <Descriptions.Item label='태그(특징)' span={1.5}>
                     <Form.Item className='product-detail-form-item' id='prd_features_id' name='prd_features' initialValue={features}>
                         <Select className='product-detail-form-select' mode='multiple' allowClear>
                             {
@@ -77,6 +104,20 @@ function ShowProductEssentialInfoDetail({product, form}) {
                             }
                         </Select>
                     </Form.Item>
+                </Descriptions.Item>
+                <Descriptions.Item label='판매 여부(화면 노출 여부)' span={1.5}>
+                    <Form.Item className='product-detail-form-item' id='prd_sale_yn_id' name='prd_sale_yn' initialValue={product.isSale}>
+                        <Switch checkedChildren={<span>판매</span>} unCheckedChildren={<span>미판매</span>}/>
+                    </Form.Item>
+                </Descriptions.Item>
+                <Descriptions.Item label='가격'>
+                    <InputNumber addonAfter="₩" min="0" stringMode defaultValue={product.price} onChange={changePrice}/>
+                </Descriptions.Item>
+                <Descriptions.Item label='할인율'>
+                    <InputNumber addonAfter="%" min={0} max={100} parser={(value) => value?.replace('%', '')} defaultValue={product.discountRate} onChange={changeDiscountRate}/>
+                </Descriptions.Item>
+                <Descriptions.Item label='할인율 적용 금액'>
+                    {finalPrice}₩
                 </Descriptions.Item>
                 <Descriptions.Item label={(<span>옵션<br /><Tag color={'gold'}>*대표 옵션</Tag></span>)} span={3}>
                     <Form.Item className='product-detail-form-item' id='prd_option_id' name='prd_option'
@@ -94,7 +135,10 @@ function ShowProductEssentialInfoDetail({product, form}) {
                     </Form.Item>
                 </Descriptions.Item>
             </Descriptions>
-        </div>
+            <div className="product-detail-save-button">
+                <Button type="primary" htmlType={"submit"}>기본정보 수정</Button>
+            </div>
+        </Form>
     );
 }
 

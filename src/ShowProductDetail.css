@@ -25,6 +25,13 @@
     padding-bottom: 15px;
 }
 
+.product-detail-save-button {
+    display: flex;
+    justify-content: end;
+    align-content: center;
+    margin-top: 15px;
+}
+
 .product-detail-modify-button {
     margin-right: 15px;
 }
