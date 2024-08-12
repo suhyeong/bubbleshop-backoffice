@@ -7,7 +7,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import {getResult} from "./AxiosResponse";
 import axios from "axios";
-import type {Product, ProductImage} from "./CommonInterface";
+import type {Product} from "./CommonInterface";
 
 const { Content } = Layout;
 

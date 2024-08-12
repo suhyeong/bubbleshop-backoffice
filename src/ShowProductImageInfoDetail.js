@@ -54,7 +54,7 @@ const ShowProductImageInfoDetail = ({productCode, productImage}) => {
         }
 
         if(detailImages.length) {
-            detailImages.map(image => {
+            detailImages.forEach(image => {
                 requestImgList = getNewOrOriginImageInfo(requestImgList, image, "F");
             });
         }
