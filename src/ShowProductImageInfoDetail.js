@@ -2,8 +2,10 @@ import ProductDetailImage from "./ProductDetailImage";
 import React, {useEffect, useState} from "react";
 import {Button, Spin} from "antd";
 import type {ProductImage} from "./CommonInterface";
+import axios from "axios";
+import {getResult} from "./AxiosResponse";
 
-const ShowProductImageInfoDetail = ({productImage}) => {
+const ShowProductImageInfoDetail = ({productCode, productImage}) => {
 
     // 썸네일 이미지
     const [thumbnailImage, setThumbnailImage] = useState([]);
@@ -22,12 +24,11 @@ const ShowProductImageInfoDetail = ({productImage}) => {
         const thumbImg: ProductImage[] = prdImage.filter(item => item.divCode === 'T');
         if(thumbImg.length > 0) {
             const file = {
-                uid: 0,
+                uid: thumbImg[0].sequence,
                 name: thumbImg[0].path,
                 status: 'done',
                 url: thumbImg[0].fullUrl
             }
-            console.log(file);
             setThumbnailImage([file]);
         }
     }
@@ -36,19 +37,60 @@ const ShowProductImageInfoDetail = ({productImage}) => {
         const detailImg: ProductImage[] = prdImage.filter(item => item.divCode === 'F');
         if(detailImg.length > 0) {
             const newDetailImages = detailImg.map((item, index) => ({
-                uid: index+1,
+                uid: item.sequence,
                 name: item.path,
                 status: 'done',
                 url: item.fullUrl
             }));
-            console.log(newDetailImages);
             setDetailImages(newDetailImages);
         }
     }
 
     const onSubmit =() => {
-        console.log(thumbnailImage);
-        console.log(detailImages);
+        let requestImgList = []; // Request Image List
+
+        if(thumbnailImage.length) {
+            requestImgList = getNewOrOriginImageInfo(requestImgList, thumbnailImage[0], "T");
+        }
+
+        if(detailImages.length) {
+            detailImages.map(image => {
+                requestImgList = getNewOrOriginImageInfo(requestImgList, image, "F");
+            });
+        }
+
+        const request = {
+            images: requestImgList
+        }
+
+        axios.put(`/product-proxy/product/v1/products/${productCode}/image`, request)
+            .then(response => {
+                getResult(response, "정상적으로 수정되었습니다.");
+                window.close();
+            })
+            .catch(error => {
+                console.error("데이터 저장시 에러가 발생했습니다. Error : ", error);
+                getResult(error.response, "상품 정보 저장시 에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            });
+    }
+
+    const getNewOrOriginImageInfo = (request, image, divCode) => {
+        if(image instanceof File) {
+            //이미지 정보가 새로 변경된 이미지일 경우
+            const newImg = {
+                divCode: divCode,
+                fileName: image.name
+            }
+            return [...request, newImg];
+        } else {
+            //기존에 이미 존재하던 이미지 정보일 경우
+            const originImg = {
+                divCode: divCode,
+                fileName: image.name,
+                sequence: image.uid,
+            }
+            return [...request, originImg];
+        }
     }
 
     return (

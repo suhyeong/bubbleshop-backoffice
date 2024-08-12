@@ -24,6 +24,7 @@ export interface Product {
 }
 
 export interface ProductImage {
+    sequence: number,
     divCode: string,
     path: string,
     fullUrl: string,

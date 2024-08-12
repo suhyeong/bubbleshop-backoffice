@@ -43,9 +43,6 @@ function ShowProductEssentialInfoDetail({product}) {
 
     // [저장] 버튼 클릭시 수행 작업
     const onSubmit = async () => {
-        console.log(form.getFieldsValue());
-        console.log(options);
-
         const row = await form.validateFields();
         const request = {
             features: row['prd_features'],
@@ -59,7 +56,7 @@ function ShowProductEssentialInfoDetail({product}) {
 
         axios.put(`/product-proxy/product/v1/products/${product.productCode}`, request)
             .then(response => {
-                getResult(response, "정상적으로 추가되었습니다.");
+                getResult(response, "정상적으로 수정되었습니다.");
                 window.close();
             })
             .catch(error => {

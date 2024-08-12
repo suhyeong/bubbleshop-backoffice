@@ -25,7 +25,6 @@ function ShowProductDetail() {
         axios.get(`/product-proxy/product/v1/products/${prdCode}`)
             .then(response => {
                 const result:Product = response.data;
-                console.log(result);
                 setResult(result);
                 setLoading(false);
             })
@@ -84,7 +83,7 @@ function ShowProductDetail() {
                                     {
                                         key: 'imageInfo',
                                         label: '이미지 정보',
-                                        children: result && <ShowProductImageInfoDetail productImage={result.imageList} />
+                                        children: result && <ShowProductImageInfoDetail productCode={result.productCode} productImage={result.imageList} />
                                     }
                                 ]}>
                             </Tabs>
