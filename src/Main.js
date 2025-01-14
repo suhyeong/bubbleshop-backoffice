@@ -10,6 +10,7 @@ import {MenuInfo} from "rc-menu/lib/interface";
 import ManageProduct from "./ManageProduct";
 import HealthCheck from "./HealthCheck";
 import ManageCategory from "./ManageCategory";
+import ManageMember from "./member/ManageMember";
 
 const { Header, Footer, Sider } = Layout;
 
@@ -33,7 +34,9 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('Main', '1', <HealthCheck />, <AppstoreOutlined />),
-    getItem('Manage Member', '2', null, <AppstoreOutlined />),
+    getItem('Manage Member', '2', null, <AppstoreOutlined />, [
+        getItem('Member', '2-1', <ManageMember />, ''),
+    ]),
     getItem('Manage Product', '3', null, <AppstoreOutlined />, [
         getItem('Product', '3-1', <ManageProduct />, ''),
         getItem('Category', '3-2', <ManageCategory />, '')

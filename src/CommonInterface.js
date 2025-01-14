@@ -72,3 +72,12 @@ export const ProductFeatures = () => [
         desc: '재입고'
     },
 ]
+
+export interface Member {
+    id: string,
+    name: string,
+    nickname: string,
+    phoneNum: string,
+    joinDate: string,
+    withdrawalDate?: string
+}
