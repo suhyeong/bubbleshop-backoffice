@@ -67,7 +67,6 @@ const getSelectedLabel = (key: MenuInfo) => {
 
 function Main() {
     const [collapsed, setCollapsed] = useState(false);
-
     const [selectedMenu, setSelectedMenu] = useState(items[0]);
 
     const {

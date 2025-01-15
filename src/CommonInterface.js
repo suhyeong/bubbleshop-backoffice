@@ -1,3 +1,9 @@
+export interface HealthCheckInfo {
+    target: string,
+    isHealth: boolean,
+    status: number,
+    statusText: string
+}
 
 export interface Category {
     categoryCode: string,
