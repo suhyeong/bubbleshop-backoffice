@@ -18,13 +18,24 @@ function HealthCheck() {
     useEffect(() => {
         const fetchData = async (target: string) => {
             const healthUrl = `/${target}-proxy/actuator/health`;
-            const response = await axios(healthUrl);
-            setHealthCheckResult(prevInfo => [...prevInfo, {
-                target: target,
-                isHealth: response.ok,
-                status: response.status,
-                statusText: response.statusText
-            }]);
+            axios.get(healthUrl)
+                .then(response => {
+                    setHealthCheckResult(prevInfo => [...prevInfo, {
+                        target: target,
+                        isHealth: response.ok,
+                        status: response.status,
+                        statusText: response.statusText
+                    }]);
+                })
+                .catch(error => {
+                    console.error("도메인 헬스 체크시 에러가 발생했습니다. Error : ", error);
+                    setHealthCheckResult(prevInfo => [...prevInfo, {
+                        target: target,
+                        isHealth: false,
+                        status: error.response.status,
+                        statusText: error.response.statusText
+                    }]);
+                });
         }
 
         domainList.forEach(domain => {
