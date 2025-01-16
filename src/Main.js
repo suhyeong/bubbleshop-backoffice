@@ -85,8 +85,10 @@ function Main() {
         <Layout className="main-layout">
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                 <div className="menu-vertical" />
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items}
-                      onClick={(item) => handleClick(item)}/>
+                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" inlineIndent={20} items={items}
+                      onClick={(item) => handleClick(item)}
+                      openKeys={['2', '3', '4']}
+                />
             </Sider>
             <Layout>
                 <Header style={{background: colorBgContainer}} />

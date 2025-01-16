@@ -1,9 +1,11 @@
-import {Layout, theme} from "antd";
+import {Card, Layout, Spin, Tabs, theme, Typography} from "antd";
 import axios from "axios";
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import type {Member} from "../CommonInterface";
 import {getResult} from "../AxiosResponse";
+import "./ShowMemberDetail.css";
+import ShowMemberEssentialInfoDetail from "./ShowMemberEssentialInfoDetail";
 const { Content } = Layout;
 
 function ShowMemberDetail() {
@@ -30,6 +32,31 @@ function ShowMemberDetail() {
                 window.close();
             });
     }, [memId]);
+
+    return (
+        <Layout className='member-management-detail'>
+            <Content className='member-management-detail-content'>
+                <div style={{background: colorBgContainer, borderRadius: borderRadiusLG}}>
+                    <Card className='member-detail-card'
+                          title={<Typography.Title level={2} style={{ margin: 3 }}>회원 상세 정보 🔍</Typography.Title>}>
+                        <Spin spinning={loading} tip="Loading" size="middle">
+                            <Tabs
+                                type='card'
+                                size='large'
+                                items={[
+                                    {
+                                        key: 'essentialInfo',
+                                        label: '기본 정보',
+                                        children: <ShowMemberEssentialInfoDetail />
+                                    }
+                                ]}>
+                            </Tabs>
+                        </Spin>
+                    </Card>
+                </div>
+            </Content>
+        </Layout>
+    );
 }
 
 export default ShowMemberDetail;

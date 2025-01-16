@@ -1,0 +1,11 @@
+.member-management-detail {
+    min-height: 100vh;
+}
+
+.member-management-detail-content {
+    padding: 16px 16px;
+}
+
+.member-detail-card {
+    width: 100%;
+}
