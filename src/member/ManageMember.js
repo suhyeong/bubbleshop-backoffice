@@ -107,7 +107,7 @@ function ManagementMember() {
     const openMemberDetailPopup = (value) => (e) => {
         // default : _blank
         const popupWindow = window.open(
-            `/management/member/detail/${value}`, // todo
+            `/management/member/detail/${value}`,
         );
 
         if (popupWindow) {
@@ -205,7 +205,7 @@ function ManagementMember() {
                 <div className='manage-member-search-result-body'>
                     <Table
                         columns={searchResultTableColumns}
-                        rowKey={(resultItem) => resultItem.memberId}
+                        rowKey={(resultItem) => resultItem.id}
                         dataSource={searchResult}
                         pagination={{position: ['bottomCenter'],
                             current: page,

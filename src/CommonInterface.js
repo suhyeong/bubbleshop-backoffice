@@ -85,5 +85,10 @@ export interface Member {
     nickname: string,
     phoneNum: string,
     joinDate: string,
-    withdrawalDate?: string
+    point?: number,
+    withdrawalDate?: string,
+    leftDateToDiscardMemberInfo? : string,
+    birthDate?: string,
+    email?: string,
+    isEmailReceiveAgree?: boolean
 }

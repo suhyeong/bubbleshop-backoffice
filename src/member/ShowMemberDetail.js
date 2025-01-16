@@ -47,7 +47,7 @@ function ShowMemberDetail() {
                                     {
                                         key: 'essentialInfo',
                                         label: '기본 정보',
-                                        children: <ShowMemberEssentialInfoDetail />
+                                        children: result && <ShowMemberEssentialInfoDetail member={result} />
                                     }
                                 ]}>
                             </Tabs>
