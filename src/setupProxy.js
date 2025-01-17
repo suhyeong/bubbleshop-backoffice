@@ -5,6 +5,9 @@ module.exports = function(app) {
         '/product-proxy',
         createProxyMiddleware({
             target: 'http://localhost:8080',
+            headers: {
+                From: 'BO'
+            },
             changeOrigin: true,
         })
     );
@@ -12,6 +15,19 @@ module.exports = function(app) {
         '/category-proxy',
         createProxyMiddleware({
             target: 'http://localhost:8080',
+            headers: {
+                From: 'BO'
+            },
+            changeOrigin: true,
+        })
+    );
+    app.use(
+        '/member-proxy',
+        createProxyMiddleware({
+            target: 'http://localhost:8081',
+            headers: {
+                From: 'BO'
+            },
             changeOrigin: true,
         })
     );
