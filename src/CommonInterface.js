@@ -90,5 +90,5 @@ export interface Member {
     leftDateToDiscardMemberInfo? : string,
     birthDate?: string,
     email?: string,
-    isEmailReceiveAgree?: boolean
+    emailReceiveAgree?: boolean
 }
