@@ -8,44 +8,38 @@ import "./ShowMemberDetail.css";
 
 function ShowMemberReviewInfoDetail({memberId}) {
     const [loading, setLoading] = useState(true);
-    const [moreLoading, setMoreLoading] = useState(false);
     const [reviews, setReviews] = useState([]);
     const [page, setPage] = useState(1);
 
     useEffect(() => {
         fetchData();
-        setLoading(false);
-    }, []);
-
-    useEffect(() => {
-        fetchData();
-        setMoreLoading(false);
     }, [page]);
 
     const fetchData = () => {
         // 회원 상세 페이지에서 회원의 리뷰 리스트 조회시 페이지 사이즈 20으로 고정
-        const param = `?page=${page}&size=20&memberId=${memberId}`
+        const param = `?page=${page}&size=1&memberId=${memberId}`
         axios.get(`/review-proxy/review/v1/reviews` + param)
             .then(response => {
                 const result:ReviewResult = response.data;
                 setReviews([...reviews, ...result.reviewList]);
+                setLoading(false);
             })
             .catch(error => {
                 console.error("데이터 조회시 에러가 발생했습니다. Error : ", error);
                 getResult(error.response, "회원의 리뷰 정보 조회시 에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                setLoading(false);
                 window.close();
             });
     }
 
     // 리뷰 리스트 더보기 버튼 클릭시 수행
     const onLoadMore = () => {
-        setMoreLoading(true);
         setPage(page + 1);
     }
 
     // 리뷰 리스트 더보기 버튼
     const loadMore =
-        !moreLoading && !loading ? (
+        !loading ? (
             <div className="member-review-list-loading-more-btn">
                 <Button onClick={onLoadMore}>loading more</Button>
             </div>
