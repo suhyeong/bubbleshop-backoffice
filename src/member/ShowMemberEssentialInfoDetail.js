@@ -43,7 +43,7 @@ function ShowMemberEssentialInfoDetail({member}) {
                     <>{member.email}</>
                 </Descriptions.Item>
                 <Descriptions.Item label='이메일 수신 동의 여부' span={1.5}>
-                    <>{member.emailReceiveAgree ? '동의함' : '동의 안함'}</>
+                    <>{member.isEmailReceiveAgree ? '동의함' : '동의 안함'}</>
                 </Descriptions.Item>
                 <Descriptions.Item label='회원 포인트'>
                     <>{member.point}</>

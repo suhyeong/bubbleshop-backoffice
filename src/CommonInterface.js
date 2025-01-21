@@ -1,9 +1,19 @@
+import {TimeRangePickerProps} from "antd";
+import dayjs from "dayjs";
+
 export interface HealthCheckInfo {
     target: string,
     isHealth: boolean,
     status: number,
     statusText: string
 }
+
+export const rangePresets: TimeRangePickerProps['presets'] = [
+    { label: 'Last 7 Days', value: [dayjs().add(-7, 'd'), dayjs()] },
+    { label: 'Last 14 Days', value: [dayjs().add(-14, 'd'), dayjs()] },
+    { label: 'Last 30 Days', value: [dayjs().add(-30, 'd'), dayjs()] },
+    { label: 'Last 90 Days', value: [dayjs().add(-90, 'd'), dayjs()] },
+];
 
 export interface Category {
     categoryCode: string,
@@ -90,5 +100,30 @@ export interface Member {
     leftDateToDiscardMemberInfo? : string,
     birthDate?: string,
     email?: string,
-    emailReceiveAgree?: boolean
+    isEmailReceiveAgree?: boolean,
+}
+
+export interface ReviewResult {
+    count: number,
+    reviewList: Review[]
+}
+
+export interface Review {
+    reviewNo: string,
+    memberId: string,
+    memberName?: string,
+    productCode: string,
+    productName?: string,
+    productScore?: number,
+    reviewContent: string,
+    isReviewShow?: boolean,
+    isPointPayed?: boolean,
+    createdAt: string,
+    imageList?: ReviewImage[]
+}
+
+export interface ReviewImage {
+    sequence: number,
+    path: string,
+    fullUrl: string,
 }
