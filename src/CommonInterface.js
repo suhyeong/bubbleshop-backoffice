@@ -22,23 +22,6 @@ export interface Category {
     isShow: boolean
 }
 
-export interface Product {
-    productCode: string,
-    productName: string,
-    productEngName: string,
-    mainCategoryCode: string,
-    mainCategoryName: string,
-    subCategoryCode: string,
-    subCategoryName: string,
-    createdAt: string,
-    price: number,
-    discountRate: number,
-    isSale: boolean,
-    imageList: ProductImage[],
-    features: ProductFeature[],
-    options: ProductOption[]
-}
-
 export interface ProductImage {
     sequence: number,
     divCode: string,
@@ -57,6 +40,23 @@ export interface ProductOption {
     name: string,
     stockCnt: number,
     isDefaultOption: boolean
+}
+
+export interface Product {
+    productCode: string,
+    productName: string,
+    productEngName: string,
+    mainCategoryCode: string,
+    mainCategoryName: string,
+    subCategoryCode: string,
+    subCategoryName: string,
+    createdAt: string,
+    price: number,
+    discountRate: number,
+    isSale: boolean,
+    imageList: ProductImage[],
+    features: ProductFeature[],
+    options: ProductOption[]
 }
 
 export const CategoryType = () => [
@@ -103,9 +103,10 @@ export interface Member {
     isEmailReceiveAgree?: boolean,
 }
 
-export interface ReviewResult {
-    count: number,
-    reviewList: Review[]
+export interface ReviewImage {
+    sequence: number,
+    path: string,
+    fullUrl: string,
 }
 
 export interface Review {
@@ -122,8 +123,7 @@ export interface Review {
     imageList?: ReviewImage[]
 }
 
-export interface ReviewImage {
-    sequence: number,
-    path: string,
-    fullUrl: string,
+export interface ReviewResult {
+    count: number,
+    reviewList: Review[]
 }
