@@ -141,8 +141,9 @@ function ManagementMember() {
         if(values['mem_nickname'] !== undefined) {
             param +=`&memberNickname=${values['mem_nickname']}&isMemberNicknameContains=${containName}`;
         }
-
-        param += `&joinStartDate=${joinStartDate}&joinEndDate=${joinEndDate}`
+        if(joinStartDate && joinEndDate) {
+            param += `&joinStartDate=${joinStartDate}&joinEndDate=${joinEndDate}`
+        }
 
         return param;
     }
