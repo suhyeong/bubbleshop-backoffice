@@ -6,6 +6,9 @@ import type {Member} from "../CommonInterface";
 import {getResult} from "../AxiosResponse";
 import "./ShowMemberDetail.css";
 import ShowMemberEssentialInfoDetail from "./ShowMemberEssentialInfoDetail";
+import ShowMemberReviewInfoDetail from "./ShowMemberReviewInfoDetail";
+import ShowMemberOrderInfoDetail from "./ShowMemberOrderInfoDetail";
+
 const { Content } = Layout;
 
 function ShowMemberDetail() {
@@ -48,6 +51,21 @@ function ShowMemberDetail() {
                                         key: 'essentialInfo',
                                         label: '기본 정보',
                                         children: result && <ShowMemberEssentialInfoDetail member={result} />
+                                    },
+                                    {
+                                        key: 'pointInfo',
+                                        label: '포인트 정보',
+                                        //children: result && <ShowMemberEssentialInfoDetail member={result} /> // todo
+                                    },
+                                    {
+                                        key: 'reviewInfo',
+                                        label: '리뷰 정보',
+                                        children: result && <ShowMemberReviewInfoDetail memberId={result.id} />
+                                    },
+                                    {
+                                        key: 'orderInfo',
+                                        label: '주문 정보',
+                                        children: result && <ShowMemberOrderInfoDetail memberId={result.id} />
                                     }
                                 ]}>
                             </Tabs>

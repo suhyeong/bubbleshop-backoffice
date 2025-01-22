@@ -9,3 +9,18 @@
 .member-detail-card {
     width: 100%;
 }
+
+.member-review-list-loading-more-btn {
+    text-align: center;
+    margin-top: 15px;
+    height: 30px;
+    line-height: 32px;
+}
+
+.member-review-list-blue-action-icon {
+    color: blue;
+}
+
+.member-review-list-red-action-icon {
+    color: red;
+}

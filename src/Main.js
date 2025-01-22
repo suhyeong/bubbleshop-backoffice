@@ -11,6 +11,7 @@ import ManageProduct from "./ManageProduct";
 import HealthCheck from "./HealthCheck";
 import ManageCategory from "./ManageCategory";
 import ManageMember from "./member/ManageMember";
+import ManageReview from "./review/ManageReview";
 
 const { Header, Footer, Sider } = Layout;
 
@@ -36,6 +37,7 @@ const items: MenuItem[] = [
     getItem('Main', '1', <HealthCheck />, <AppstoreOutlined />),
     getItem('Manage Member', '2', null, <AppstoreOutlined />, [
         getItem('Member', '2-1', <ManageMember />, ''),
+        getItem('Review', '2-2', <ManageReview />, ''),
     ]),
     getItem('Manage Product', '3', null, <AppstoreOutlined />, [
         getItem('Product', '3-1', <ManageProduct />, ''),

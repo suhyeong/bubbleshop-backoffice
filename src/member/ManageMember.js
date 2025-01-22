@@ -1,41 +1,35 @@
+import type {TableProps} from "antd";
 import {
     Breadcrumb,
     Button,
     Checkbox,
     Col,
+    DatePicker,
     Form,
     Input,
     Layout,
     Row,
     Space,
+    Table,
     theme,
-    DatePicker,
-    Typography,
-    Tooltip, Table
+    Tooltip,
+    Typography
 } from "antd";
 import "./ManageMember.css";
 import "../Main.css";
 import React, {useState} from "react";
 import axios from "axios";
 import dayjs from 'dayjs';
-import {TimeRangePickerProps} from "antd";
-import type {TableProps} from "antd";
 import {getResult} from "../AxiosResponse";
-import {Member} from "../CommonInterface";
+import {Member, rangePresets} from "../CommonInterface";
+
 const { Content } = Layout;
 const { RangePicker } = DatePicker;
 
 interface MemberResult {
-    totalCount: number,
+    count: number,
     memberList: Member[]
 }
-
-const rangePresets: TimeRangePickerProps['presets'] = [
-    { label: 'Last 7 Days', value: [dayjs().add(-7, 'd'), dayjs()] },
-    { label: 'Last 14 Days', value: [dayjs().add(-14, 'd'), dayjs()] },
-    { label: 'Last 30 Days', value: [dayjs().add(-30, 'd'), dayjs()] },
-    { label: 'Last 90 Days', value: [dayjs().add(-90, 'd'), dayjs()] },
-];
 
 function ManagementMember() {
     const searchResultTableColumns: TableProps<Member>['columns'] = [

@@ -31,4 +31,14 @@ module.exports = function(app) {
             changeOrigin: true,
         })
     );
+    app.use(
+        '/review-proxy',
+        createProxyMiddleware({
+            target: 'http://localhost:8081',
+            headers: {
+                From: 'BO'
+            },
+            changeOrigin: true,
+        })
+    );
 };
