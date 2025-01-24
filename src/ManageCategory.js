@@ -7,7 +7,7 @@ import type {TableProps} from "antd";
 import axios from "axios";
 import { getResult } from "./AxiosResponse";
 import type {Category} from "./CommonInterface";
-import {CategoryType} from "./CommonInterface";
+import {CategoryType} from "./CommonConst";
 
 const { Content } = Layout;
 

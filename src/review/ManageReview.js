@@ -32,7 +32,7 @@ function ManageReview() {
             title: '리뷰 번호',
             dataIndex: 'reviewNo',
             key: 'reviewNo',
-            render: (text) => (<Typography.Link onClick={openReviewDetailPopup(text)}>{text}</Typography.Link>),
+            render: (text) => (<Typography.Link onClick={openDetailPopup(text, 'review')}>{text}</Typography.Link>),
             align: "center",
             ellipsis: true,
         },
@@ -40,17 +40,17 @@ function ManageReview() {
             title: '회원 아이디',
             dataIndex: 'memberId',
             key: 'memberId',
-            render: (text) => (<Typography.Link onClick={openMemberDetailPopup(text)}>{text}</Typography.Link>),
+            render: (text) => (<Typography.Link onClick={openDetailPopup(text, 'member')}>{text}</Typography.Link>),
             align: "center",
             ellipsis: true,
         },
         {
             title: '회원명',
-            dataIndex: 'name',
+            dataIndex: 'memberName',
             key: 'memberName',
+            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>),
             align: "center",
             ellipsis: true,
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
         },
         {
             title: '상품코드',
@@ -58,7 +58,7 @@ function ManageReview() {
             key: 'productCode',
             align: "center",
             ellipsis: true,
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
+            render: (text) => (<Typography.Link onClick={openDetailPopup(text, 'product')}>{text}</Typography.Link>)
         },
         {
             title: '상품명',
@@ -74,7 +74,15 @@ function ManageReview() {
             key: 'reviewShowYn',
             align: "center",
             ellipsis: true,
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
+            render: (text) => (<Tooltip placement="left" title={text}>{text ? '공개' : '미공개'}</Tooltip>)
+        },
+        {
+            title: '포인트 지급 여부',
+            dataIndex: 'isPayedPoint',
+            key: 'payedPointYn',
+            align: "center",
+            ellipsis: true,
+            render: (text) => (<Tooltip placement="left" title={text}>{text ? '지급 완료' : '미지급'}</Tooltip>)
         },
         {
             title: '작성일시',
@@ -100,23 +108,10 @@ function ManageReview() {
     const [createdStartDate, setCreatedStartDate] = useState(dayjs().add(-7, 'd').format('YYYY-MM-DD'));
     const [createdEndDate, setCreatedEndDate] = useState(dayjs().format('YYYY-MM-DD'));
 
-    const openReviewDetailPopup = (value) => (e) => {
+    const openDetailPopup = (value, type) => (e) => {
         // default : _blank
         const popupWindow = window.open(
-            `/management/review/detail/${value}`,
-        );
-
-        if (popupWindow) {
-            popupWindow.focus(); // 팝업 창이 이미 열려 있으면 해당 창에 포커스를 맞춥니다.
-        } else {
-            alert("팝업 창이 차단되었습니다. 팝업 차단을 해제해주세요.");
-        }
-    };
-
-    const openMemberDetailPopup = (value) => (e) => {
-        // default : _blank
-        const popupWindow = window.open(
-            `/management/member/detail/${value}`,
+            `/management/${type}/detail/${value}`,
         );
 
         if (popupWindow) {

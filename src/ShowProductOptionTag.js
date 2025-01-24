@@ -14,7 +14,6 @@ const ShowProductOptionTag = ({options, setOptions}) => {
     const [defaultOptionSequence, setDefaultOptionSequence] = useState(1);
 
     useEffect(() => {
-        console.log(options)
         const defaultOption = options.filter(option => option.isDefaultOption);
         if(defaultOption.length)
             setDefaultOptionSequence(options.filter(option => option.isDefaultOption)[0].sequence);

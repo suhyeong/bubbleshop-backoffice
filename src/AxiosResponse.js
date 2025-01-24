@@ -11,7 +11,7 @@ const getResult = (response, message) => {
             if(response.headers['resultmessage']) {
                 resultMessage = decodeUTF8String(response.headers['resultmessage']);
             }
-            console.log(resultMessage);
+            //console.log(resultMessage);
             if(resultMessage === null || resultMessage === undefined)
                 resultMessage = message;
 

@@ -24,6 +24,7 @@ function ShowProductDetail() {
     useEffect(() => {
         axios.get(`/product-proxy/product/v1/products/${prdCode}`)
             .then(response => {
+                console.log(response);
                 const result:Product = response.data;
                 setResult(result);
                 setLoading(false);
