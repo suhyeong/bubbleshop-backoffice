@@ -1,4 +1,18 @@
-import {theme, Layout, Typography, Card, Spin, Form, Descriptions, Image, Space, List, Divider, Button} from "antd";
+import {
+    theme,
+    Layout,
+    Typography,
+    Card,
+    Spin,
+    Form,
+    Descriptions,
+    Image,
+    Space,
+    List,
+    Divider,
+    Button,
+    Modal
+} from "antd";
 import { WarningOutlined, CommentOutlined, MessageOutlined, PictureOutlined } from '@ant-design/icons';
 import axios from "axios";
 import {useParams} from "react-router-dom";
@@ -7,9 +21,9 @@ import type {Review} from "../CommonInterface";
 import {star} from "../CommonConst";
 import "./ShowReviewDetail.css";
 import {getResult} from "../AxiosResponse";
+import TextArea from "antd/es/input/TextArea";
 
 const { Content } = Layout;
-const { Text } = Typography;
 
 function ShowReviewDetail() {
     const {
@@ -21,10 +35,19 @@ function ShowReviewDetail() {
     const [loading, setLoading] = useState(true);
     const [result, setResult] = useState(null);
 
+    // 댓글 수정
+    const [modifyingCommentNo, setModifyingCommentNo] = useState('');
+    const [modifyingContent, setModifyingContent] = useState('');
+
+    // 모달
+    const [modalType, setModalType] = useState('');
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalLoading, setModalLoading] = useState(false);
+
     useEffect(() => {
         axios.get(`/review-proxy/review/v1/reviews/${reviewNo}`)
             .then(response => {
-                console.log(response);
                 const result:Review = response.data;
                 setResult(result);
                 setLoading(false);
@@ -45,25 +68,123 @@ function ShowReviewDetail() {
 
     // 리뷰 공개 여부 전환 버튼 클릭
     const onClickReviewShowYn = (e) => {
-        console.log(e);
-        // todo
+        const before = result.isReviewShow ? '공개' : '비공개';
+        const after = result.isReviewShow ? '비공개' : '공개';
+        setModalTitle(`리뷰를 ${before}에서 ${after}로 변경하겠습니까?`);
+        setModalType('reviewShow');
+        setModalOpen(true);
     }
 
     // 댓글 리스트 Action
     const onActions = (comment) => {
-        let actions = [<Typography.Text>작성일시 {comment.createdDate}</Typography.Text>, <Typography.Text>수정일시 {comment.modifiedDate}</Typography.Text>];
+        let actions = [
+            <Typography.Text>작성자 {comment.createdBy === 'admin' ? '관리자' : comment.createdBy}</Typography.Text>,
+            <Typography.Text>작성일시 {comment.createdDate}</Typography.Text>,
+            <Typography.Text>수정일시 {comment.modifiedDate}</Typography.Text>
+        ];
 
         if(comment.createdBy === 'admin') {
-            actions = [...actions, <Typography.Link key="comment-update-btn" onClick={onClickUpdateComment}>댓글 수정하기</Typography.Link>]
+            if(modifyingCommentNo === comment.commentNo) {
+                actions = [...actions, <Typography.Link key="comment-upd-cmplt-btn" onClick={onClickUpdateCompleteComment}>취소/완료</Typography.Link>]
+            } else {
+                actions = [...actions, <Typography.Link key="comment-upd-btn" onClick={e => onClickUpdateComment(comment)}>댓글 수정하기</Typography.Link>]
+            }
         }
 
         return actions;
     };
 
     // 댓글 수정하기 버튼 클릭시 수행
-    const onClickUpdateComment = (e) => {
-        console.log(e);
-        // todo
+    const onClickUpdateComment = (comment) => {
+        setModifyingContent(comment.content);
+        setModifyingCommentNo(comment.commentNo);
+    }
+
+    // 댓글 취소/완료 버튼 클릭시 모달 팝업 노출
+    const onClickUpdateCompleteComment = (e) => {
+        setModalTitle('댓글을 수정하시겠습니까?');
+        setModalType('comment');
+        setModalOpen(true);
+    }
+
+    // 모달 'OK' 버튼 클릭
+    const handleOK = (e) => {
+        setModalLoading(true);
+        switch (modalType) {
+            case 'comment':
+                handleOKUpdateComment();
+                break;
+            case 'reviewShow':
+                handleOKUpdateReviewShow();
+                break;
+            default:
+                break;
+        }
+    }
+
+    const handleOKUpdateComment = () => {
+        axios.patch(`/comment-proxy/comment/v1/comments/${modifyingCommentNo}`, {
+            content: modifyingContent
+        })
+            .then(response => {
+                let newComments = [...result.comments];
+                result.comments = newComments.map(item => {
+                    if(item.commentNo === modifyingCommentNo) {
+                        item.content = response.data.content;
+                        item.modifiedDate = response.data.modifiedDate;
+                    }
+                    return item;
+                });
+                setResult(result);
+                setModalLoading(false);
+            })
+            .catch(error => {
+                console.error("데이터 수정시 에러가 발생했습니다. Error : ", error);
+                getResult(error.response, "댓글 수정시 에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                setModalLoading(false);
+            });
+        setModifyingContent('');
+        setModifyingCommentNo('');
+        setModalOpen(false);
+    }
+
+    const handleOKUpdateReviewShow = () => {
+        axios.patch(`/review-proxy/review/v1/reviews/${result.reviewNo}`, {
+            isShowYn: !result.isReviewShow
+        })
+            .then(response => {
+                setResult(prev => ({...prev, isReviewShow: response.isReviewShow}));
+                setModalLoading(false);
+            })
+            .catch(error => {
+                console.error("데이터 수정시 에러가 발생했습니다. Error : ", error);
+                getResult(error.response, "리뷰 수정시 에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                setModalLoading(false);
+            });
+        setModalOpen(false);
+    }
+
+    // 모달 'Cancel' 클릭
+    const handleCancel = (e) => {
+        setModalOpen(false);
+
+        if(modalType === 'comment') {
+            setModifyingContent('');
+            setModifyingCommentNo('');
+        }
+    }
+
+    // 댓글 내용 \n 노출되도록 세팅
+    const setContent = (content) => {
+        const splitStr = content.split('\n');
+        return splitStr.map((text, index) => {
+            return index === splitStr.length-1 ? <>{text}</> : <>{text}<br/></>
+        });
+    }
+
+    // 댓글 내용 수정
+    const onChangeContent = (e) => {
+        setModifyingContent(e.currentTarget.value);
     }
 
     return !loading && result && (
@@ -87,12 +208,15 @@ function ShowReviewDetail() {
                                     <Descriptions.Item label='리뷰 포인트 지급 여부' span={1.5}>
                                         <Space split={<Divider type="vertical"/>}>
                                             <Typography.Text>{result.isPayedPoint ? '지급 완료' : '미지급'}</Typography.Text>
-                                            <Button danger type={'primary'} size={'small'} onClick={onClickPayPoint}>포인트 지급하기</Button>
+                                            {
+                                                !result.isPayedPoint &&
+                                                <Button danger type={'primary'} size={'small'} onClick={onClickPayPoint}>포인트 지급하기</Button>
+                                            }
                                         </Space>
                                     </Descriptions.Item>
                                     <Descriptions.Item label='리뷰 공개 여부' span={1.5}>
                                         <Space split={<Divider type="vertical"/>}>
-                                            <Typography.Text>{result.isReviewShow ? '공개' : '미공개'}</Typography.Text>
+                                            <Typography.Text>{result.isReviewShow ? '공개' : '비공개'}</Typography.Text>
                                             <Button type={'primary'} size={'small'} onClick={onClickReviewShowYn}>공개여부 전환하기</Button>
                                         </Space>
                                     </Descriptions.Item>
@@ -113,7 +237,7 @@ function ShowReviewDetail() {
                                                 <Space size={'middle'}>
                                                     {
                                                         result.images.map((image, index) => (
-                                                            <Image id={index} width={200} src={image.fullPath}/>
+                                                            <Image key={index} id={index} width={200} src={image.fullPath}/>
                                                         ))
                                                     }
                                                 </Space>
@@ -134,10 +258,9 @@ function ShowReviewDetail() {
                                                             key={item.commentNo}
                                                             actions={onActions(item)}
                                                         >
-                                                            <Space split={<Divider type="vertical"/>}>
-                                                                <Text>작성자 {item.createdBy === 'admin' ? '관리자' : item.createdBy}</Text>
-                                                                <Text>{item.content}</Text>
-                                                            </Space>
+                                                            {modifyingCommentNo && modifyingCommentNo === item.commentNo ?
+                                                                <TextArea defaultValue={modifyingContent} autoSize onChange={onChangeContent} />
+                                                                : setContent(item.content)}
                                                         </List.Item>
                                                     )}
                                                 />)
@@ -151,6 +274,19 @@ function ShowReviewDetail() {
                     </Card>
                 </div>
             </Content>
+            <Modal
+                open={modalOpen}
+                title={modalTitle}
+                onOk={handleOK}
+                onCancel={handleCancel}
+                confirmLoading={modalLoading}
+                footer={(_, { OkBtn, CancelBtn }) => (
+                    <>
+                        <CancelBtn />
+                        <OkBtn />
+                    </>
+                )}
+            />
         </Layout>
     )
 }
