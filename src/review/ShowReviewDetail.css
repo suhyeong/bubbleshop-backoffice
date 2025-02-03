@@ -1,0 +1,11 @@
+.review-management-detail {
+    min-height: 100vh;
+}
+
+.review-management-detail-content {
+    padding: 16px 16px;
+}
+
+.review-detail-card {
+    width: 100%;
+}

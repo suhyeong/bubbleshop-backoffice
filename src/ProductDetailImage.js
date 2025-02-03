@@ -2,14 +2,7 @@ import React, {useState} from "react";
 import type {UploadProps} from "antd";
 import {Button, Descriptions, message, Upload, Image} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
-
-const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-    });
+import {getBase64} from "./CommonConst";
 
 const ProductDetailImage = ({type,
                                 thumbnailImageFile, setThumbnailImageFile,

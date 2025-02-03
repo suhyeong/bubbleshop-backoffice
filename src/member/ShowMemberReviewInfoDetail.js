@@ -1,7 +1,8 @@
 import {Button, List, Space} from "antd";
-import { StarFilled, StarOutlined, PlusCircleOutlined, CheckCircleOutlined, StopOutlined} from '@ant-design/icons';
+import { PlusCircleOutlined, CheckCircleOutlined, StopOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from "react";
 import type {ReviewResult} from "../CommonInterface";
+import {star} from "../CommonConst";
 import axios from "axios";
 import {getResult} from "../AxiosResponse";
 import "./ShowMemberDetail.css";
@@ -17,7 +18,7 @@ function ShowMemberReviewInfoDetail({memberId}) {
 
     const fetchData = () => {
         // 회원 상세 페이지에서 회원의 리뷰 리스트 조회시 페이지 사이즈 20으로 고정
-        const param = `?page=${page}&size=1&memberId=${memberId}`
+        const param = `?page=${page}&size=20&memberId=${memberId}`
         axios.get(`/review-proxy/review/v1/reviews` + param)
             .then(response => {
                 const result:ReviewResult = response.data;
@@ -45,21 +46,6 @@ function ShowMemberReviewInfoDetail({memberId}) {
             </div>
         ) : null;
 
-    // 리뷰 별점
-    const star = (score) => {
-        let starElements = [];
-        let filled = 1;
-        for(let i = 1; i<=5; i++){
-            if(filled <= score) {
-                starElements = [...starElements, <StarFilled key={i} style={{'color': 'red'}}/>];
-            } else {
-                starElements = [...starElements, <StarOutlined key={i} />];
-            }
-            filled++;
-        }
-        return <Space>{starElements.map(item => item)}</Space>;
-    }
-
     const actionItems = (review) => {
         let list = [];
 
@@ -69,22 +55,29 @@ function ShowMemberReviewInfoDetail({memberId}) {
         }
 
         // 2. 포인트 지급 여부
-        list = [...list, review.isPointPayed ? <Space className="member-review-list-blue-action-icon"><CheckCircleOutlined />포인트 지급 완료 리뷰</Space>
-            : <Space className="member-review-list-red-action-icon" onClick={onClickReviewAction}><PlusCircleOutlined />포인트 미지급 리뷰</Space>
+        list = [...list, review.isPayedPoint ? <Space className="member-review-list-blue-action-icon"><CheckCircleOutlined />포인트 지급 완료 리뷰</Space>
+            : <Space className="member-review-list-red-action-icon"><PlusCircleOutlined />포인트 미지급 리뷰</Space>
         ];
 
         // 3. 리뷰 공개 여부
-        list = [...list, review.isReviewShow ? <Space onClick={onClickReviewAction}>공개 리뷰</Space>
-            : <Space className="member-review-list-red-action-icon" onClick={onClickReviewAction}><StopOutlined />비공개 리뷰</Space>
+        list = [...list, review.isReviewShow ? <Space>공개 리뷰</Space>
+            : <Space className="member-review-list-red-action-icon"><StopOutlined />비공개 리뷰</Space>
         ];
 
         return list;
     }
 
-    // 리뷰 리스트 클릭시 리뷰 상세 페이지 이동
+    // 리뷰 리스트에서 리뷰 번호 클릭시 리뷰 상세 페이지 이동
     const onClickReviewAction = (e) => {
-        // todo
-        console.log(e);
+        const popupWindow = window.open(
+            `/management/review/detail/${e.target.innerText}`,
+        );
+
+        if (popupWindow) {
+            popupWindow.focus(); // 팝업 창이 이미 열려 있으면 해당 창에 포커스를 맞춥니다.
+        } else {
+            alert("팝업 창이 차단되었습니다. 팝업 차단을 해제해주세요.");
+        }
     }
 
     return (
@@ -100,7 +93,7 @@ function ShowMemberReviewInfoDetail({memberId}) {
                     actions={actionItems(item)}
                 >
                     <List.Item.Meta
-                        title={<>{item.reviewNo} | {star(item.productScore)}</>}
+                        title={<Space onClick={onClickReviewAction}>{item.reviewNo} | {star(item.productScore)}</Space>}
                     description={item.productName} />
                     {item.reviewContent}
                 </List.Item>

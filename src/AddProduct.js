@@ -16,7 +16,7 @@ import {
 } from "antd";
 import axios from "axios";
 import type {Category} from "./CommonInterface";
-import {ProductFeatures} from "./CommonInterface";
+import {ProductFeatures} from "./CommonConst";
 import "./AddProduct.css";
 import "./Main.css";
 import {getResult} from "./AxiosResponse";

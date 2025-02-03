@@ -41,4 +41,14 @@ module.exports = function(app) {
             changeOrigin: true,
         })
     );
+    app.use(
+        '/comment-proxy',
+        createProxyMiddleware({
+            target: 'http://localhost:8081',
+            headers: {
+                From: 'BO'
+            },
+            changeOrigin: true,
+        })
+    );
 };

@@ -1,5 +1,5 @@
 import {Button, Descriptions, Form, Input, InputNumber, Select, Switch, Tag} from "antd";
-import {ProductFeatures} from "./CommonInterface";
+import {ProductFeatures} from "./CommonConst";
 import React, {useEffect, useState} from "react";
 import ShowProductOptionTag from "./ShowProductOptionTag";
 import axios from "axios";
