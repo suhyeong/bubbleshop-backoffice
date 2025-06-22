@@ -1,10 +1,10 @@
 import './App.css';
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import ManageProduct from "./ManageProduct";
-import AddProduct from "./AddProduct";
+import ManageProduct from "./product/ManageProduct";
+import AddProduct from "./product/AddProduct";
 import Main from "./Main";
-import ShowProductDetail from "./ShowProductDetail";
+import ShowProductDetail from "./product/ShowProductDetail";
 import ShowMemberDetail from "./member/ShowMemberDetail";
 import ShowReviewDetail from "./review/ShowReviewDetail";
 

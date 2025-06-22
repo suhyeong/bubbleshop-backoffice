@@ -5,9 +5,9 @@ import ShowProductEssentialInfoDetail from "./ShowProductEssentialInfoDetail";
 import ShowProductImageInfoDetail from "./ShowProductImageInfoDetail";
 import React, {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
-import {getResult} from "./AxiosResponse";
+import {getResult} from "../AxiosResponse";
 import axios from "axios";
-import type {Product} from "./CommonInterface";
+import type {Product} from "../CommonInterface";
 
 const { Content } = Layout;
 
@@ -24,7 +24,6 @@ function ShowProductDetail() {
     useEffect(() => {
         axios.get(`/product-proxy/product/v1/products/${prdCode}`)
             .then(response => {
-                console.log(response);
                 const result:Product = response.data;
                 setResult(result);
                 setLoading(false);

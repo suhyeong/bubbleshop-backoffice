@@ -1,5 +1,5 @@
 import {Card, Flex, Input, InputNumber, Tag, Tooltip} from "antd";
-import type {ProductOption} from "./CommonInterface";
+import type {ProductOption} from "../CommonInterface";
 import "./ShowProductDetail.css";
 import React, {useEffect, useRef, useState} from "react";
 import {CheckOutlined, CloseOutlined, PlusOutlined} from "@ant-design/icons";

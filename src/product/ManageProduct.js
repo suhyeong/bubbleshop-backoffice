@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import "./ManageProduct.css";
-import "./Main.css";
-import type {Category, Product} from "./CommonInterface";
+import "../Main.css";
+import type {Category, Product} from "../CommonInterface";
 import axios from "axios";
 import {Breadcrumb, Button, Form, Layout, theme, Input, Row, Col, Space, Select, Checkbox, Table, Tooltip, Typography} from "antd";
 import type { TableProps } from 'antd';
-import {getResult} from "./AxiosResponse";
+import {getResult} from "../AxiosResponse";
 
 const { Content } = Layout;
 
@@ -30,7 +30,7 @@ function ManagementProduct() {
             key: 'productName',
             align: "center",
             ellipsis: true,
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
+            render: (text) => (<Tooltip placement="bottom" title={text}>{text}</Tooltip>)
         },
         {
             title: '상품 영문명',
@@ -38,7 +38,7 @@ function ManagementProduct() {
             key: 'productEngName',
             align: "center",
             ellipsis: true,
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
+            render: (text) => (<Tooltip placement="bottom" title={text}>{text}</Tooltip>)
         },
         {
             title: '메인 카테고리',
@@ -46,7 +46,7 @@ function ManagementProduct() {
             key: 'mainCategoryName',
             align: "center",
             ellipsis: true,
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
+            render: (text) => (<Tooltip placement="bottom" title={text}>{text}</Tooltip>)
         },
         {
             title: '서브 카테고리',
@@ -54,7 +54,7 @@ function ManagementProduct() {
             key: 'subCategoryName',
             align: "center",
             ellipsis: true,
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
+            render: (text) => (<Tooltip placement="bottom" title={text}>{text}</Tooltip>)
         },
         {
             title: '가격',
