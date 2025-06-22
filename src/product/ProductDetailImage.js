@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import type {UploadProps} from "antd";
 import {Button, Descriptions, message, Upload, Image} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
-import {getBase64} from "./CommonConst";
+import {getBase64} from "../CommonConst";
 
 const ProductDetailImage = ({type,
                                 thumbnailImageFile, setThumbnailImageFile,
@@ -72,7 +72,7 @@ const ProductDetailImage = ({type,
                 </Upload>
             </Descriptions.Item>
             <Descriptions.Item span={3} label='상세 이미지'>
-                <Upload {...detailImageProp} onPreview={handlePreview} >
+                <Upload {...detailImageProp} onPreview={handlePreview} multiple>
                     <Button icon={<UploadOutlined />}>Upload</Button>
                 </Upload>
             </Descriptions.Item>

@@ -1,13 +1,13 @@
 import {Breadcrumb, Checkbox, Col, Row, Form, Input, Layout, theme, Select, Space, Button, Table, Typography, Popconfirm, Tooltip} from "antd";
-import "./Main.css";
+import "../Main.css";
 import "./ManageProduct.css";
 import "./ManageCategory.css";
 import React, {useState} from "react";
 import type {TableProps} from "antd";
 import axios from "axios";
-import { getResult } from "./AxiosResponse";
-import type {Category} from "./CommonInterface";
-import {CategoryType} from "./CommonConst";
+import { getResult } from "../AxiosResponse";
+import type {Category} from "../CommonInterface";
+import {CategoryType} from "../CommonConst";
 
 const { Content } = Layout;
 

@@ -15,11 +15,11 @@ import {
     Typography
 } from "antd";
 import axios from "axios";
-import type {Category} from "./CommonInterface";
-import {ProductFeatures} from "./CommonConst";
+import type {Category} from "../CommonInterface";
+import {ProductFeatures} from "../CommonConst";
 import "./AddProduct.css";
-import "./Main.css";
-import {getResult} from "./AxiosResponse";
+import "../Main.css";
+import {getResult} from "../AxiosResponse";
 import AddProductOptionTag from "./AddProductOptionTag";
 import ProductDetailImage from "./ProductDetailImage";
 
