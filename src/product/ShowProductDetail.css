@@ -68,6 +68,12 @@
     margin-bottom: auto;
 }
 
+.product-detail-point-type-add-tag {
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
 .ant-input-number .ant-input-number-input {
     text-align: center;
 }
