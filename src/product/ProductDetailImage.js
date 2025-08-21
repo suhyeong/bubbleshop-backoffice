@@ -18,6 +18,11 @@ const ProductDetailImage = ({type,
         onRemove: (file) => {
             setThumbnailImageFile([]);
         },
+        onChange: (file) => {
+            if(file.file.response) {
+                setDetailImageFiles([...detailImageFiles, file.file]);
+            }
+        },
         beforeUpload: (file) => {
             if(thumbnailImageFile.length >= 1) {
                 message.error('썸네일 이미지는 1개만 올릴 수 있습니다. 이미지 삭제 후 재시도해주세요!');
@@ -25,7 +30,6 @@ const ProductDetailImage = ({type,
             }
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            setThumbnailImageFile([file]);
             return true;
         },
         thumbnailImageFile,
@@ -42,6 +46,11 @@ const ProductDetailImage = ({type,
             newFileList.splice(index, 1);
             setDetailImageFiles(newFileList);
         },
+        onChange: (file) => {
+            if(file.file.response) {
+                setDetailImageFiles([...detailImageFiles, file.file]);
+            }
+        },
         beforeUpload: (file) => {
             if(detailImageFiles.length >= 10) {
                 message.error('상세 이미지는 10개만 올릴 수 있습니다. 이미지 삭제 후 재시도해주세요!');
@@ -49,7 +58,6 @@ const ProductDetailImage = ({type,
             }
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            setDetailImageFiles([...detailImageFiles, file]);
             return true;
         },
         detailImageFiles,
@@ -72,7 +80,7 @@ const ProductDetailImage = ({type,
                 </Upload>
             </Descriptions.Item>
             <Descriptions.Item span={3} label='상세 이미지'>
-                <Upload {...detailImageProp} onPreview={handlePreview} multiple>
+                <Upload {...detailImageProp} onPreview={handlePreview}>
                     <Button icon={<UploadOutlined />}>Upload</Button>
                 </Upload>
             </Descriptions.Item>

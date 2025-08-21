@@ -32,7 +32,7 @@ function ShowProductDetail() {
                 console.error("데이터 조회시 에러가 발생했습니다. Error : ", error);
                 getResult(error.response, "상품 정보 조회시 에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
                 setLoading(false);
-                window.close();
+                // window.close();
             });
     }, [prdCode]);
 

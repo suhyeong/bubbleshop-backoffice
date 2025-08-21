@@ -4,6 +4,8 @@ import React, {useEffect, useState} from "react";
 import ShowProductOptionTag from "./ShowProductOptionTag";
 import axios from "axios";
 import {getResult} from "../AxiosResponse";
+import ShowProductPointTag from "./ShowProductPointTag";
+import type {ProductPoint} from "../CommonInterface";
 
 function ShowProductEssentialInfoDetail({product}) {
     const [form] = Form.useForm();
@@ -13,6 +15,8 @@ function ShowProductEssentialInfoDetail({product}) {
     const [options, setOptions] = useState(product.options);
     // 태그(특징)
     const features = product.features && product.features.map(item => item.code);
+    // 포인트 타입
+    const [points, setPoints] = useState(product.points);
 
     const [originPrice, setOriginPrice] = useState(product.price);
     const [discountRate, setDiscountRate] = useState(product.discountRate);
@@ -51,13 +55,14 @@ function ShowProductEssentialInfoDetail({product}) {
             price: originPrice,
             discount: discountRate,
             isSale: row['prd_sale_yn'],
-            options: options
+            options: options,
+            points: points
         }
 
         axios.put(`/product-proxy/product/v1/products/${product.productCode}`, request)
             .then(response => {
                 getResult(response, "정상적으로 수정되었습니다.");
-                window.close();
+                window.location.reload();
             })
             .catch(error => {
                 console.error("데이터 저장시 에러가 발생했습니다. Error : ", error);
@@ -115,6 +120,28 @@ function ShowProductEssentialInfoDetail({product}) {
                 </Descriptions.Item>
                 <Descriptions.Item label='할인율 적용 금액'>
                     {finalPrice}₩
+                </Descriptions.Item>
+                <Descriptions.Item label='포인트 지급 유형' span={3}>
+                    <Form.Item className='product-detail-form-item' id='prd_point_id' name='prd_point'
+                               rules={[
+                                   {
+                                       validator: (_, value) => {
+                                           if (points && points.length > 0) {
+                                               for (const point: ProductPoint of points) {
+                                                   if(!point.pointTypeCode) {
+                                                       return Promise.reject(new Error('포인트 지급 유형을 선택해주세요!'));
+                                                   }
+                                                   if(point.savePoint <= 0) {
+                                                       return Promise.reject(new Error('지급할 포인트를 입력해주세요!'));
+                                                   }
+                                               }
+                                           }
+                                           return Promise.resolve();
+                                       },
+                                   },
+                               ]}>
+                        <ShowProductPointTag points={points} setPoints={setPoints} />
+                    </Form.Item>
                 </Descriptions.Item>
                 <Descriptions.Item label={(<span>옵션<br /><Tag color={'gold'}>*대표 옵션</Tag></span>)} span={3}>
                     <Form.Item className='product-detail-form-item' id='prd_option_id' name='prd_option'
