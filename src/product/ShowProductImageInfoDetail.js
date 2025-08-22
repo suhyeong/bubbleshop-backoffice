@@ -1,9 +1,9 @@
 import ProductDetailImage from "./ProductDetailImage";
 import React, {useEffect, useState} from "react";
 import {Button, Spin} from "antd";
-import type {ProductImage} from "./CommonInterface";
+import type {ProductImage} from "../CommonInterface";
 import axios from "axios";
-import {getResult} from "./AxiosResponse";
+import {getResult} from "../AxiosResponse";
 
 const ShowProductImageInfoDetail = ({productCode, productImage}) => {
 

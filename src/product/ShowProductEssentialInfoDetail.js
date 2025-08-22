@@ -1,9 +1,9 @@
 import {Button, Descriptions, Form, Input, InputNumber, Select, Switch, Tag} from "antd";
-import {ProductFeatures} from "./CommonConst";
+import {ProductFeatures} from "../CommonConst";
 import React, {useEffect, useState} from "react";
 import ShowProductOptionTag from "./ShowProductOptionTag";
 import axios from "axios";
-import {getResult} from "./AxiosResponse";
+import {getResult} from "../AxiosResponse";
 
 function ShowProductEssentialInfoDetail({product}) {
     const [form] = Form.useForm();
@@ -12,7 +12,7 @@ function ShowProductEssentialInfoDetail({product}) {
     // 옵션
     const [options, setOptions] = useState(product.options);
     // 태그(특징)
-    const features = product.features.map(item => item.code);
+    const features = product.features && product.features.map(item => item.code);
 
     const [originPrice, setOriginPrice] = useState(product.price);
     const [discountRate, setDiscountRate] = useState(product.discountRate);

@@ -7,9 +7,9 @@ import {
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import {MenuInfo} from "rc-menu/lib/interface";
-import ManageProduct from "./ManageProduct";
+import ManageProduct from "./product/ManageProduct";
 import HealthCheck from "./HealthCheck";
-import ManageCategory from "./ManageCategory";
+import ManageCategory from "./product/ManageCategory";
 import ManageMember from "./member/ManageMember";
 import ManageReview from "./review/ManageReview";
 
