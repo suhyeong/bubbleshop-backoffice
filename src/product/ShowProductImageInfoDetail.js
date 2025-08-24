@@ -58,10 +58,13 @@ const ShowProductImageInfoDetail = ({productCode, productImage}) => {
                 requestImgList = getNewOrOriginImageInfo(requestImgList, image, "F");
             });
         }
+        console.log("detailImages :::", detailImages);
 
         const request = {
             images: requestImgList
         }
+
+        return;
 
         axios.put(`/product-proxy/product/v1/products/${productCode}/image`, request)
             .then(response => {
@@ -79,7 +82,7 @@ const ShowProductImageInfoDetail = ({productCode, productImage}) => {
             //이미지 정보가 새로 변경된 이미지일 경우
             const newImg = {
                 divCode: divCode,
-                fileName: image.name
+                fileName: image.originFileObj.name
             }
             return [...request, newImg];
         } else {

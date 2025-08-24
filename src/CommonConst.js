@@ -23,20 +23,35 @@ export const CategoryType = () => [
 
 export const ProductFeatures = () => [
     {
-        code: 'R',
-        desc: '랜덤 상품'
+        code: "R",
+        desc: "랜덤 상품"
     },
     {
-        code: 'F',
-        desc: '고정 상품'
+        code: "F",
+        desc: "고정 상품"
     },
     {
-        code: 'N',
-        desc: '신상품'
+        code: "N",
+        desc: "신상품"
     },
     {
-        code: 'S',
-        desc: '재입고'
+        code: "S",
+        desc: "재입고"
+    },
+]
+
+export const ProductPointType = () => [
+    {
+        code: "R",
+        desc: "일반 리뷰"
+    },
+    {
+        code: "P",
+        desc: "사진 리뷰"
+    },
+    {
+        code: "C",
+        desc: "구매 확정"
     },
 ]
 

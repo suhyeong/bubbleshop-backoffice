@@ -32,6 +32,11 @@ export interface ProductOption {
     isDefaultOption: boolean
 }
 
+export interface ProductPoint {
+    pointTypeCode: string,
+    savePoint: number
+}
+
 export interface Product {
     productCode: string,
     productName: string,
@@ -46,7 +51,8 @@ export interface Product {
     isSale: boolean,
     imageList: ProductImage[],
     features: ProductFeature[],
-    options: ProductOption[]
+    options: ProductOption[],
+    points: ProductPoint[]
 }
 
 export interface Member {
