@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import ShowProductOptionTag from "./ShowProductOptionTag";
 import axios from "axios";
 import {getResult} from "../AxiosResponse";
-import ShowProductPointTag from "./ShowProductPointTag";
+import ManageProductPointTag from "./ManageProductPointTag";
 import type {ProductPoint} from "../CommonInterface";
 
 function ShowProductEssentialInfoDetail({product}) {
@@ -140,7 +140,7 @@ function ShowProductEssentialInfoDetail({product}) {
                                        },
                                    },
                                ]}>
-                        <ShowProductPointTag points={points} setPoints={setPoints} />
+                        <ManageProductPointTag points={points} setPoints={setPoints} />
                     </Form.Item>
                 </Descriptions.Item>
                 <Descriptions.Item label={(<span>옵션<br /><Tag color={'gold'}>*대표 옵션</Tag></span>)} span={3}>
