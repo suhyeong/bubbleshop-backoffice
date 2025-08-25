@@ -15,13 +15,14 @@ import {
     Typography
 } from "antd";
 import axios from "axios";
-import type {Category} from "../CommonInterface";
+import type {Category, ProductPoint} from "../CommonInterface";
 import {ProductFeatures} from "../CommonConst";
 import "./AddProduct.css";
 import "../Main.css";
 import {getResult} from "../AxiosResponse";
 import AddProductOptionTag from "./AddProductOptionTag";
 import ProductDetailImage from "./ProductDetailImage";
+import ManageProductPointTag from "./ManageProductPointTag";
 
 const { Content } = Layout;
 
@@ -58,6 +59,9 @@ function AddProduct() {
     // 옵션
     const [options, setOptions] = useState([]);
 
+    // 포인트
+    const [points, setPoints] = useState([]);
+
     // [저장] 버튼 클릭시 상품 정보 저장 API 호출
     const onSubmit = async () => {
         try {
@@ -71,8 +75,9 @@ function AddProduct() {
                 features: row['prd_features'],
                 options: options,
                 defaultOption: options[0],
-                thumbnailImageName: thumbnailImageFile[0].name,
-                detailImageName: detailImageFiles.map(file => file.name)
+                points: points,
+                thumbnailImageName: thumbnailImageFile[0]?.name,
+                detailImageName: detailImageFiles?.map(file => file.name)
             }
 
             // console.log(request);
@@ -176,6 +181,28 @@ function AddProduct() {
                                                 ))
                                             }
                                         </Select>
+                                    </Form.Item>
+                                </Descriptions.Item>
+                                <Descriptions.Item label='포인트 지급 유형' span={3}>
+                                    <Form.Item className='product-add-form-item' id='prd_point_id' name='prd_point'
+                                               rules={[
+                                                   {
+                                                       validator: (_, value) => {
+                                                           if (points && points.length > 0) {
+                                                               for (const point: ProductPoint of points) {
+                                                                   if(!point.pointTypeCode) {
+                                                                       return Promise.reject(new Error('포인트 지급 유형을 선택해주세요!'));
+                                                                   }
+                                                                   if(point.savePoint <= 0) {
+                                                                       return Promise.reject(new Error('지급할 포인트를 입력해주세요!'));
+                                                                   }
+                                                               }
+                                                           }
+                                                           return Promise.resolve();
+                                                       },
+                                                   },
+                                               ]}>
+                                        <ManageProductPointTag points={points} setPoints={setPoints} />
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label={(<span>옵션<br /><Tag color={'gold'}>*대표 옵션</Tag></span>)} span={3}>

@@ -4,17 +4,21 @@ import React, {useEffect, useState} from "react";
 import type {ProductPoint} from "../CommonInterface";
 import {ProductPointType} from "../CommonConst";
 
-const ShowProductPointTag = ({points, setPoints}) => {
+const ManageProductPointTag = ({points, setPoints}) => {
+    // 기존 포인트 지급 유형
     const productPointType = ProductPointType();
-
     // 추가 가능한 포인트 타입 리스트
     const [availableAddPointType, setAvailableAddPointType] = useState([]);
 
     // 포인트 지급 유형 정보가 변경될때 마다 추가 가능한 포인트 타입 리스트 변경
     useEffect(() => {
-        setAvailableAddPointType(productPointType.filter((item) =>
-            points && !points.some(point => point.pointTypeCode === item.code)));
-    }, [productPointType, points]);
+        const items = [];
+        for (const pointType of productPointType) {
+            if(points && !points.some(point => point.pointTypeCode === pointType.code))
+                items.push(pointType);
+        }
+        setAvailableAddPointType(items);
+    }, [points]);
 
     const addNewPoint = () => {
         const sequence = points.length + 1;
@@ -88,4 +92,4 @@ const ShowProductPointTag = ({points, setPoints}) => {
     )
 }
 
-export default ShowProductPointTag;
+export default ManageProductPointTag;
