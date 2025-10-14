@@ -49,7 +49,6 @@ const ManageProductPointTag = ({points, setPoints}) => {
 
     const getCardTitle = (data, index) => {
         const type = productPointType.find((type) => type.code === data.pointTypeCode);
-        console.log(type);
         return (
             <Select
                 placeholder={"포인트 유형을 선택해주세요"}
