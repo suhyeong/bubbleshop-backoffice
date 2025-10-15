@@ -49,11 +49,11 @@ const ShowProductImageInfoDetail = ({productCode, productImage}) => {
     const onSubmit =() => {
         let requestImgList = []; // Request Image List
 
-        if(thumbnailImage.length) {
+        if(thumbnailImage.length > 0) {
             requestImgList = getNewOrOriginImageInfo(requestImgList, thumbnailImage[0], "T");
         }
 
-        if(detailImages.length) {
+        if(detailImages.length > 0) {
             detailImages.forEach(image => {
                 requestImgList = getNewOrOriginImageInfo(requestImgList, image, "F");
             });
@@ -64,7 +64,7 @@ const ShowProductImageInfoDetail = ({productCode, productImage}) => {
             images: requestImgList
         }
 
-        return;
+        console.log(request);
 
         axios.put(`/product-proxy/product/v1/products/${productCode}/image`, request)
             .then(response => {
@@ -78,11 +78,11 @@ const ShowProductImageInfoDetail = ({productCode, productImage}) => {
     }
 
     const getNewOrOriginImageInfo = (request, image, divCode) => {
-        if(image instanceof File) {
+        if(image.response) {
             //이미지 정보가 새로 변경된 이미지일 경우
             const newImg = {
                 divCode: divCode,
-                fileName: image.originFileObj.name
+                fileName: image.response.fileName
             }
             return [...request, newImg];
         } else {

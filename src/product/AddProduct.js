@@ -76,8 +76,8 @@ function AddProduct() {
                 options: options,
                 defaultOption: options[0],
                 points: points,
-                thumbnailImageName: thumbnailImageFile[0]?.name,
-                detailImageName: detailImageFiles?.map(file => file.name)
+                thumbnailImageName: thumbnailImageFile[0]?.response.fileName,
+                detailImageName: detailImageFiles?.map(file => file.response.fileName)
             }
 
             // console.log(request);

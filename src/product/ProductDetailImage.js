@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import type {UploadProps} from "antd";
 import {Button, Descriptions, message, Upload, Image} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
@@ -14,14 +14,23 @@ const ProductDetailImage = ({type,
         action: '/product-proxy/product/v1/products/temp-image',
         listType: 'picture',
         maxCount: 1,
-        defaultFileList: thumbnailImageFile,
+        fileList: thumbnailImageFile,
         onRemove: (file) => {
             setThumbnailImageFile([]);
         },
-        onChange: (file) => {
-            if(file.file.response) {
-                setDetailImageFiles([...detailImageFiles, file.file]);
-            }
+        onChange: ({ file , fileList}) => {
+            const updatedFileList = fileList.map(item => {
+                // 새로 업로드 완료된 파일만 수정
+                if (item.response && item.status === 'done') {
+                    return {
+                        ...item,
+                        name: `${item.response.fileName} (원본: ${item.originFileObj.name})`,
+                    };
+                }
+                // 기존 파일은 그대로 반환
+                return item;
+            });
+            setThumbnailImageFile(updatedFileList);
         },
         beforeUpload: (file) => {
             if(thumbnailImageFile.length >= 1) {
@@ -32,24 +41,32 @@ const ProductDetailImage = ({type,
             reader.readAsDataURL(file);
             return true;
         },
-        thumbnailImageFile,
     };
 
     const detailImageProp: UploadProps = {
         action: '/product-proxy/product/v1/products/temp-image',
         listType: 'picture',
         maxCount: 10,
-        defaultFileList: detailImageFiles,
+        fileList: detailImageFiles,
         onRemove: (file) => {
             const index = detailImageFiles.indexOf(file);
             const newFileList = detailImageFiles.slice();
             newFileList.splice(index, 1);
             setDetailImageFiles(newFileList);
         },
-        onChange: (file) => {
-            if(file.file.response) {
-                setDetailImageFiles([...detailImageFiles, file.file]);
-            }
+        onChange: ({ file , fileList}) => {
+            const updatedFileList = fileList.map(item => {
+                // 새로 업로드 완료된 파일만 수정
+                if (item.response && item.status === 'done') {
+                    return {
+                        ...item,
+                        name: `${item.response.fileName} (원본: ${item.originFileObj.name})`,
+                    };
+                }
+                // 기존 파일은 그대로 반환
+                return item;
+            });
+            setDetailImageFiles(updatedFileList);
         },
         beforeUpload: (file) => {
             if(detailImageFiles.length >= 10) {
@@ -60,7 +77,6 @@ const ProductDetailImage = ({type,
             reader.readAsDataURL(file);
             return true;
         },
-        detailImageFiles,
     };
 
     const handlePreview = async (file) => {

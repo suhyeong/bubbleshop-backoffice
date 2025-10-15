@@ -1,3 +1,18 @@
+# 어드민 프로젝트
+
+## Getting Started
+- 필수 다운로드 라이브러리
+```
+npm install -save react-scripts
+npm install axios
+npm install antd --save
+```
+- 리액트 디자인 [Ant Design](https://ant.design/docs/react/introduce)
+
+---
+<details>
+<summary>Create React App</summary>
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -13,6 +28,22 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
+
+if you have an error,
+```
+sh: react-scripts: command not found
+```
+then run this command
+```
+npm install -save react-scripts
+```
+or try this command in order
+```
+rm -rf package-lock.json
+rm -rf node_modules
+npm install
+```
+
 
 ### `npm test`
 
@@ -68,3 +99,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+</details>
