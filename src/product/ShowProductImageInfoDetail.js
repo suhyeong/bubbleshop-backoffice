@@ -58,15 +58,8 @@ const ShowProductImageInfoDetail = ({productCode, productImage}) => {
                 requestImgList = getNewOrOriginImageInfo(requestImgList, image, "F");
             });
         }
-        console.log("detailImages :::", detailImages);
 
-        const request = {
-            images: requestImgList
-        }
-
-        console.log(request);
-
-        axios.put(`/product-proxy/product/v1/products/${productCode}/image`, request)
+        axios.put(`/product-proxy/product/v1/products/${productCode}/image`, { images: requestImgList })
             .then(response => {
                 getResult(response, "정상적으로 수정되었습니다.");
                 window.close();
