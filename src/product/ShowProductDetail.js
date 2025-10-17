@@ -20,12 +20,15 @@ function ShowProductDetail() {
     const { prdCode } = useParams();
     const [loading, setLoading] = useState(true);
     const [result, setResult] = useState(null);
+    const [enableDelete, setEnableDelete] = useState(true);
 
     useEffect(() => {
         axios.get(`/product-proxy/product/v1/products/${prdCode}`)
             .then(response => {
                 const result:Product = response.data;
                 setResult(result);
+                // 상품 판매중이면 삭제 불가능 처리
+                if (result.isSale) { setEnableDelete(false); }
                 setLoading(false);
             })
             .catch(error => {
@@ -90,7 +93,7 @@ function ShowProductDetail() {
                         </Spin>
                     </Card>
                     <div className="product-detail-bottom-parent">
-                        <Button className='product-detail-delete-button' onClick={onDelete}>삭제</Button>
+                        <Button className='product-detail-delete-button' disabled={!enableDelete} onClick={onDelete}>삭제</Button>
                         <Button className='product-detail-cancel-button' onClick={onCancel}>취소</Button>
                     </div>
                     <Modal

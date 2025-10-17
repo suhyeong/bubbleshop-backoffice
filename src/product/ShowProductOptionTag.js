@@ -1,4 +1,4 @@
-import {Card, Flex, Input, InputNumber, Tag, Tooltip} from "antd";
+import {Card, Flex, Input, InputNumber, Space, Tag, Tooltip} from "antd";
 import type {ProductOption} from "../CommonInterface";
 import "./ShowProductDetail.css";
 import React, {useEffect, useRef, useState} from "react";
@@ -141,7 +141,12 @@ const ShowProductOptionTag = ({options, setOptions}) => {
                                      <CheckOutlined key="editDefaultOption" onClick={(e) => handleDefaultOption(e, index, data)} />,
                                      <CloseOutlined key="delete" onClick={(e) => deleteOption(data)} />,
                                  ]}>
-                        <InputNumber type={'number'} defaultValue={data.stockCnt} onChange={(value) => changeOptionStockCount(value, index)}/>
+                        <Space direction="vertical">
+                            <Space.Compact>
+                                <InputNumber type={'number'} defaultValue={data.stockCnt} onChange={(value) => changeOptionStockCount(value, index)}/>
+                            </Space.Compact>
+                            { data.stockCnt === 0 && <Space.Compact><Tag color={'red'}>*재고 없음</Tag></Space.Compact> }
+                        </Space>
                     </Card>
                 })
             }
