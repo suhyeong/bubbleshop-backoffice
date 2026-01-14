@@ -51,8 +51,8 @@ function HealthCheck() {
                 {
                     healthCheckResult.map((info, index) => (
                         index === healthCheckResult.length-1 ?
-                            (<>{info.target} / status : {info.status}, statusText : {info.statusText}</>)
-                        : (<>{info.target} / status : {info.status}, statusText : {info.statusText}<p/></>)
+                            (<span key={index}>{info.target} / status : {info.status}, statusText : {info.statusText}</span>)
+                        : (<span key={index}>{info.target} / status : {info.status}, statusText : {info.statusText}<p/></span>)
                         )
                     )
                 }
