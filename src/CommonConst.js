@@ -10,6 +10,8 @@ export const rangePresets: TimeRangePickerProps['presets'] = [
     { label: 'Last 90 Days', value: [dayjs().add(-90, 'd'), dayjs()] },
 ];
 
+export const DateTimeRangeFormat = 'YYYY-MM-DD HH:mm:ss';
+
 export const CategoryType = () => [
     {
         code: "main",

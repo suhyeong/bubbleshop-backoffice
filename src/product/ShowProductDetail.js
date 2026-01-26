@@ -21,14 +21,25 @@ function ShowProductDetail() {
     const [loading, setLoading] = useState(true);
     const [result, setResult] = useState(null);
     const [enableDelete, setEnableDelete] = useState(true);
+    // 화면 노출 여부
+    const [isShowProduct, setIsShowProduct] = useState(false);
 
     useEffect(() => {
         axios.get(`/product-proxy/product/v1/products/${prdCode}`)
             .then(response => {
                 const result:Product = response.data;
                 setResult(result);
-                // 상품 판매중이면 삭제 불가능 처리
-                if (result.isSale) { setEnableDelete(false); }
+
+                // 상품 판매중 (FO 노출중)
+                const now = Date.now();
+                const startDate = new Date(result.displayStartDate);
+                const endDate = new Date(result.displayEndDate);
+                const isShow = result.isSale && now >= startDate && now <= endDate;
+                setIsShowProduct(isShow);
+
+                // TODO 상품 판매중이거나 주문 내역이 1개 이상 존재할 경우 삭제 불가능 처리
+                if (isShow) { setEnableDelete(false); }
+
                 setLoading(false);
             })
             .catch(error => {
@@ -81,12 +92,12 @@ function ShowProductDetail() {
                                     {
                                         key: 'essentialInfo',
                                         label: '기본 정보',
-                                        children: result && <ShowProductEssentialInfoDetail product={result} />
+                                        children: result && <ShowProductEssentialInfoDetail product={result} isShowProduct={isShowProduct} />
                                     },
                                     {
                                         key: 'imageInfo',
                                         label: '이미지 정보',
-                                        children: result && <ShowProductImageInfoDetail productCode={result.productCode} productImage={result.imageList} />
+                                        children: result && <ShowProductImageInfoDetail productCode={result.productCode} productImage={result.imageList} isShowProduct={isShowProduct} />
                                     }
                                 ]}>
                             </Tabs>

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import type {ProductPoint} from "../CommonInterface";
 import {ProductPointType} from "../CommonConst";
 
-const ManageProductPointTag = ({points, setPoints}) => {
+const ManageProductPointTag = ({points, setPoints, disabled}) => {
     // 기존 포인트 지급 유형
     const productPointType = ProductPointType();
     // 추가 가능한 포인트 타입 리스트
@@ -52,6 +52,7 @@ const ManageProductPointTag = ({points, setPoints}) => {
         return (
             <Select
                 placeholder={"포인트 유형을 선택해주세요"}
+                disabled={disabled}
                 optionFilterProp="label"
                 options={availableAddPointType.map((type) => ({ label: type.desc, value: type.code }))}
                 value={type && type.code}
@@ -75,15 +76,15 @@ const ManageProductPointTag = ({points, setPoints}) => {
                     return <Card type='inner' className='product-detail-point-type-tag-card-content'
                           key={data.pointTypeCode} title={getCardTitle(data, index)}
                           actions={[
-                              <CloseOutlined key="delete" onClick={(e) => deleteOption(index)} />,
+                              <CloseOutlined key="delete" onClick={(e) => !disabled && deleteOption(index)} />,
                           ]}>
-                        <InputNumber type={'number'} defaultValue={data.savePoint} min={0} onChange={(value) => changeSavePoint(value, index)}/>
+                        <InputNumber type={'number'} defaultValue={data.savePoint} min={0} disabled={disabled} onChange={(value) => changeSavePoint(value, index)}/>
                     </Card>
                 }))
             }
             {
                 points && points.length < productPointType.length ?
-                    (<Tag className='product-detail-point-type-add-tag' icon={<PlusOutlined />} onClick={addNewPoint}>
+                    (<Tag className='product-detail-point-type-add-tag' icon={<PlusOutlined />} onClick={() => !disabled && addNewPoint()}>
                         포인트 지급 유형 추가
                     </Tag>) : (<></>)
             }

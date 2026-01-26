@@ -5,7 +5,7 @@ import type {ProductImage} from "../CommonInterface";
 import axios from "axios";
 import {getResult} from "../AxiosResponse";
 
-const ShowProductImageInfoDetail = ({productCode, productImage}) => {
+const ShowProductImageInfoDetail = ({productCode, productImage, isShowProduct}) => {
 
     // 썸네일 이미지
     const [thumbnailImage, setThumbnailImage] = useState([]);
@@ -98,7 +98,7 @@ const ShowProductImageInfoDetail = ({productCode, productImage}) => {
                             <ProductDetailImage type={'detail'} thumbnailImageFile={thumbnailImage} setThumbnailImageFile={setThumbnailImage}
                                                 detailImageFiles={detailImages} setDetailImageFiles={setDetailImages} />
                             <div className="product-detail-save-button">
-                            <Button type="primary" onClick={onSubmit}>이미지정보 수정</Button>
+                            <Button type="primary" disabled={isShowProduct} onClick={onSubmit}>이미지정보 수정</Button>
                             </div>
                         </>
                 }
