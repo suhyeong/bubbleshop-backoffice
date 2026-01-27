@@ -51,15 +51,24 @@ function ShowProductEssentialInfoDetail({product, isShowProduct}) {
     // [저장] 버튼 클릭시 수행 작업
     const onSubmit = async () => {
         const row = await form.validateFields();
-        const request = {
+        let request = {
+            isShowProduct: isShowProduct,
             features: row['prd_features'],
-            name: row['prd_name'],
-            engName: row['prd_eng_name'],
-            price: originPrice,
-            discount: discountRate,
             isSale: row['prd_sale_yn'],
-            options: options,
-            points: points
+            options: options
+        }
+
+        if (!isShowProduct) {
+            request = {
+                ...request,
+                name: row['prd_name'],
+                engName: row['prd_eng_name'],
+                price: originPrice,
+                discount: discountRate,
+                points: points,
+                displayStartDate: row['prd_dsp_dt'][0].format(DateTimeRangeFormat),
+                displayEndDate: row['prd_dsp_dt'][1].format(DateTimeRangeFormat),
+            }
         }
 
         axios.put(`/product-proxy/product/v1/products/${product.productCode}`, request)
