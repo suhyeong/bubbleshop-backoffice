@@ -13,7 +13,7 @@ export interface Category {
 }
 
 export interface ProductImage {
-    sequence: number,
+    id: number,
     divCode: string,
     path: string,
     fullUrl: string,

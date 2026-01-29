@@ -4,6 +4,7 @@ import {Button, Spin} from "antd";
 import type {ProductImage} from "../CommonInterface";
 import axios from "axios";
 import {getResult} from "../AxiosResponse";
+import {code} from "../CommonConst";
 
 const ShowProductImageInfoDetail = ({productCode, productImage, isShowProduct}) => {
 
@@ -21,10 +22,10 @@ const ShowProductImageInfoDetail = ({productCode, productImage, isShowProduct}) 
     }, [productImage]);
 
     const defaultThumbnailFile = (prdImage) => {
-        const thumbImg: ProductImage[] = prdImage.filter(item => item.divCode === 'T');
+        const thumbImg: ProductImage[] = prdImage.filter(item => item.divCode === code.ProductImageType.thumbnail);
         if(thumbImg.length > 0) {
             const file = {
-                uid: thumbImg[0].sequence,
+                uid: thumbImg[0].id,
                 name: thumbImg[0].path,
                 status: 'done',
                 url: thumbImg[0].fullUrl
@@ -34,10 +35,10 @@ const ShowProductImageInfoDetail = ({productCode, productImage, isShowProduct}) 
     }
 
     const defaultDetailFile = (prdImage) => {
-        const detailImg: ProductImage[] = prdImage.filter(item => item.divCode === 'F');
+        const detailImg: ProductImage[] = prdImage.filter(item => item.divCode === code.ProductImageType.detail);
         if(detailImg.length > 0) {
             const newDetailImages = detailImg.map((item, index) => ({
-                uid: item.sequence,
+                uid: item.id,
                 name: item.path,
                 status: 'done',
                 url: item.fullUrl
@@ -50,19 +51,19 @@ const ShowProductImageInfoDetail = ({productCode, productImage, isShowProduct}) 
         let requestImgList = []; // Request Image List
 
         if(thumbnailImage.length > 0) {
-            requestImgList = getNewOrOriginImageInfo(requestImgList, thumbnailImage[0], "T");
+            requestImgList = getNewOrOriginImageInfo(requestImgList, thumbnailImage[0], code.ProductImageType.thumbnail);
         }
 
         if(detailImages.length > 0) {
             detailImages.forEach(image => {
-                requestImgList = getNewOrOriginImageInfo(requestImgList, image, "F");
+                requestImgList = getNewOrOriginImageInfo(requestImgList, image, code.ProductImageType.detail);
             });
         }
 
         axios.put(`/product-proxy/product/v1/products/${productCode}/image`, { images: requestImgList })
             .then(response => {
                 getResult(response, "정상적으로 수정되었습니다.");
-                window.close();
+                window.location.reload();
             })
             .catch(error => {
                 console.error("데이터 저장시 에러가 발생했습니다. Error : ", error);
@@ -83,7 +84,7 @@ const ShowProductImageInfoDetail = ({productCode, productImage, isShowProduct}) 
             const originImg = {
                 divCode: divCode,
                 fileName: image.name,
-                sequence: image.uid,
+                id: image.uid,
             }
             return [...request, originImg];
         }

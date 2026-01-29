@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import type {UploadProps} from "antd";
-import {Button, Descriptions, message, Upload, Image} from "antd";
+import {Button, Descriptions, Image, message, Upload} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
 import {getBase64} from "../CommonConst";
 
@@ -24,7 +24,7 @@ const ProductDetailImage = ({type,
                 if (item.response && item.status === 'done') {
                     return {
                         ...item,
-                        name: `${item.response.fileName} (원본: ${item.originFileObj.name})`,
+                        name: item.response.fileName,
                     };
                 }
                 // 기존 파일은 그대로 반환
@@ -60,7 +60,7 @@ const ProductDetailImage = ({type,
                 if (item.response && item.status === 'done') {
                     return {
                         ...item,
-                        name: `${item.response.fileName} (원본: ${item.originFileObj.name})`,
+                        name: item.response.fileName,
                     };
                 }
                 // 기존 파일은 그대로 반환

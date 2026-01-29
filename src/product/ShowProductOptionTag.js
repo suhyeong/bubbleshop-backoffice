@@ -143,7 +143,7 @@ const ShowProductOptionTag = ({options, setOptions}) => {
                                  ]}>
                         <Space direction="vertical">
                             <Space.Compact>
-                                <InputNumber type={'number'} defaultValue={data.stockCnt} onChange={(value) => changeOptionStockCount(value, index)}/>
+                                <InputNumber type={'number'} defaultValue={data.stockCnt} min={0} onChange={(value) => changeOptionStockCount(value, index)}/>
                             </Space.Compact>
                             { data.stockCnt === 0 && <Space.Compact><Tag color={'red'}>*재고 없음</Tag></Space.Compact> }
                         </Space>
