@@ -3,6 +3,7 @@ import type {UploadFile} from "antd";
 import {
     Button,
     Card,
+    DatePicker,
     Descriptions,
     Form,
     Input,
@@ -16,15 +17,18 @@ import {
 } from "antd";
 import axios from "axios";
 import type {Category, ProductPoint} from "../CommonInterface";
-import {ProductFeatures} from "../CommonConst";
+import {rangePresets} from "../CommonInterface";
+import {DateTimeRangeFormat, ProductFeatures} from "../CommonConst";
 import "./AddProduct.css";
 import "../Main.css";
 import {getResult} from "../AxiosResponse";
 import AddProductOptionTag from "./AddProductOptionTag";
 import ProductDetailImage from "./ProductDetailImage";
 import ManageProductPointTag from "./ManageProductPointTag";
+import dayjs from "dayjs";
 
 const { Content } = Layout;
+const { RangePicker } = DatePicker;
 
 function AddProduct() {
     const {
@@ -77,7 +81,9 @@ function AddProduct() {
                 defaultOption: options[0],
                 points: points,
                 thumbnailImageName: thumbnailImageFile[0]?.response.fileName,
-                detailImageName: detailImageFiles?.map(file => file.response.fileName)
+                detailImageName: detailImageFiles?.map(file => file.response.fileName),
+                displayStartDate: row['prd_dsp_dt'][0].format(DateTimeRangeFormat),
+                displayEndDate: row['prd_dsp_dt'][1].format(DateTimeRangeFormat),
             }
 
             // console.log(request);
@@ -163,6 +169,16 @@ function AddProduct() {
                                                 ))
                                             }
                                         </Select>
+                                    </Form.Item>
+                                </Descriptions.Item>
+                                <Descriptions.Item label='상품 전시일' span={3}>
+                                    <Form.Item id='prd_dsp_dt_id' name='prd_dsp_dt'
+                                               rules={[{ type: 'array', required: true, message: '상품 전시일은 필수입니다!' }]}>
+                                        <RangePicker showTime
+                                                     format={DateTimeRangeFormat}
+                                            presets={rangePresets}
+                                            minDate={dayjs().add(+1, 'd')}
+                                        />
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label='가격'>

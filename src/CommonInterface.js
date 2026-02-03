@@ -13,7 +13,7 @@ export interface Category {
 }
 
 export interface ProductImage {
-    sequence: number,
+    id: number,
     divCode: string,
     path: string,
     fullUrl: string,
@@ -49,6 +49,8 @@ export interface Product {
     price: number,
     discountRate: number,
     isSale: boolean,
+    displayStartDate: string,
+    displayEndDate: string,
     imageList: ProductImage[],
     features: ProductFeature[],
     options: ProductOption[],

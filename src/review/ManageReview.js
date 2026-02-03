@@ -45,14 +45,6 @@ function ManageReview() {
             ellipsis: true,
         },
         {
-            title: '회원명',
-            dataIndex: 'memberName',
-            key: 'memberName',
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>),
-            align: "center",
-            ellipsis: true,
-        },
-        {
             title: '상품코드',
             dataIndex: 'productCode',
             key: 'productCode',

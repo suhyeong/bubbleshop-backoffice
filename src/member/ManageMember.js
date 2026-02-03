@@ -50,14 +50,6 @@ function ManagementMember() {
             render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
         },
         {
-            title: '회원 닉네임',
-            dataIndex: 'nickname',
-            key: 'memberNickname',
-            align: "center",
-            ellipsis: true,
-            render: (text) => (<Tooltip placement="left" title={text}>{text}</Tooltip>)
-        },
-        {
             title: '전화번호',
             dataIndex: 'phoneNum',
             key: 'memberPhoneNumber',
@@ -138,8 +130,8 @@ function ManagementMember() {
         if(values['member_id'] !== undefined) {
             param += `&memberId=${values['member_id']}`;
         }
-        if(values['mem_nickname'] !== undefined) {
-            param +=`&memberNickname=${values['mem_nickname']}&isMemberNicknameContains=${containName}`;
+        if(values['mem_email'] !== undefined) {
+            param +=`&memberEmail=${values['mem_email']}&isMemberEmailContains=${containName}`;
         }
         if(joinStartDate && joinEndDate) {
             param += `&joinStartDate=${joinStartDate}&joinEndDate=${joinEndDate}`
@@ -177,8 +169,8 @@ function ManagementMember() {
                         <Row className='form-row-class' gutter={10}>
                             <Col span={6} key="1"><Form.Item id="member-id-form" label="회원 아이디" name="member_id"><Input allowClear/></Form.Item></Col>
                             <Col span={6} key="2">
-                                <Form.Item id="mem-nickname-form" label="회원 닉네임" name="mem_nickname">
-                                    <Input allowClear addonAfter={<Checkbox name="mem-nickname-contains" onClick={onChangeCheckBoxProductName}>포함</Checkbox>}/>
+                                <Form.Item id="mem-email-form" label="회원 이메일" name="mem_email">
+                                    <Input allowClear addonAfter={<Checkbox name="mem-email-contains" onClick={onChangeCheckBoxProductName}>포함</Checkbox>}/>
                                 </Form.Item>
                             </Col>
                             <Col span={6} key="3"><Form.Item id="mem-join-form" label="가입일시" name="mem_join_date">

@@ -1,14 +1,17 @@
-import {Button, Descriptions, Form, Input, InputNumber, Select, Switch, Tag} from "antd";
-import {ProductFeatures} from "../CommonConst";
+import {Button, DatePicker, Descriptions, Form, Input, InputNumber, Select, Switch, Tag} from "antd";
+import {DateTimeRangeFormat, ProductFeatures} from "../CommonConst";
 import React, {useEffect, useState} from "react";
 import ShowProductOptionTag from "./ShowProductOptionTag";
 import axios from "axios";
 import {getResult} from "../AxiosResponse";
 import ManageProductPointTag from "./ManageProductPointTag";
 import type {ProductPoint} from "../CommonInterface";
+import {rangePresets} from "../CommonInterface";
+import dayjs from "dayjs";
 
-function ShowProductEssentialInfoDetail({product}) {
+function ShowProductEssentialInfoDetail({product, isShowProduct}) {
     const [form] = Form.useForm();
+    const { RangePicker } = DatePicker;
     const productFeatures = ProductFeatures();
 
     // 옵션
@@ -48,15 +51,24 @@ function ShowProductEssentialInfoDetail({product}) {
     // [저장] 버튼 클릭시 수행 작업
     const onSubmit = async () => {
         const row = await form.validateFields();
-        const request = {
+        let request = {
+            isShowProduct: isShowProduct,
             features: row['prd_features'],
-            name: row['prd_name'],
-            engName: row['prd_eng_name'],
-            price: originPrice,
-            discount: discountRate,
             isSale: row['prd_sale_yn'],
-            options: options,
-            points: points
+            options: options
+        }
+
+        if (!isShowProduct) {
+            request = {
+                ...request,
+                name: row['prd_name'],
+                engName: row['prd_eng_name'],
+                price: originPrice,
+                discount: discountRate,
+                points: points,
+                displayStartDate: row['prd_dsp_dt'][0].format(DateTimeRangeFormat),
+                displayEndDate: row['prd_dsp_dt'][1].format(DateTimeRangeFormat),
+            }
         }
 
         axios.put(`/product-proxy/product/v1/products/${product.productCode}`, request)
@@ -71,7 +83,11 @@ function ShowProductEssentialInfoDetail({product}) {
     }
 
     return (
-        <Form id={'prd-detail-form'} form={form} onFinish={onSubmit}>
+        <Form id={'prd-detail-form'} form={form}
+              initialValues={{
+                  'prd_dsp_dt': [dayjs(product.displayStartDate, DateTimeRangeFormat), dayjs(product.displayEndDate, DateTimeRangeFormat)]
+              }}
+              onFinish={onSubmit}>
             <Descriptions style={{marginBottom: 20}} bordered>
                 <Descriptions.Item label='상품 코드' span={3}>
                     <Input key='prd_code' id='prd_code' disabled defaultValue={product.productCode}/>
@@ -79,13 +95,13 @@ function ShowProductEssentialInfoDetail({product}) {
                 <Descriptions.Item label='상품명' span={1.5}>
                     <Form.Item className='product-detail-form-item' id='prd_name_id' name='prd_name' initialValue={product.productName}
                                rules={[ { required: true, message: `상품명은(는) 필수값입니다!` } ]}>
-                        <Input allowClear key='prd_name' placeholder='상품명을 입력해주세요.' />
+                        <Input allowClear key='prd_name' placeholder='상품명을 입력해주세요.' disabled={isShowProduct} />
                     </Form.Item>
                 </Descriptions.Item>
                 <Descriptions.Item label='상품 영문명' span={1.5}>
                     <Form.Item className='product-detail-form-item' id='prd_eng_name_id' name='prd_eng_name' initialValue={product.productEngName}
                                rules={[ { required: true, message: `상품 영문명은(는) 필수값입니다!` } ]}>
-                        <Input allowClear key='prd_eng_name' placeholder='상품 영문명을 입력해주세요.' />
+                        <Input allowClear key='prd_eng_name' placeholder='상품 영문명을 입력해주세요.' disabled={isShowProduct} />
                     </Form.Item>
                 </Descriptions.Item>
                 <Descriptions.Item label={(<span>메인 카테고리<br />*메인 카테고리는 수정 불가합니다.</span>)} span={1.5}>
@@ -93,6 +109,12 @@ function ShowProductEssentialInfoDetail({product}) {
                 </Descriptions.Item>
                 <Descriptions.Item label={(<span>서브 카테고리<br />*서브 카테고리는 수정 불가합니다.</span>)} span={1.5}>
                     <Select className='product-detail-form-select' defaultValue={product.subCategoryCode} disabled options={[{value: product.subCategoryCode, label: product.subCategoryName}]} />
+                </Descriptions.Item>
+                <Descriptions.Item label='상품 전시일' span={3}>
+                    <Form.Item id='prd_dsp_dt_id' name='prd_dsp_dt'
+                               rules={[{ type: 'array', required: true, message: '상품 전시일은 필수입니다!' }]}>
+                        <RangePicker showTime format={DateTimeRangeFormat} presets={rangePresets} disabled={isShowProduct} />
+                    </Form.Item>
                 </Descriptions.Item>
                 <Descriptions.Item label='태그(특징)' span={1.5}>
                     <Form.Item className='product-detail-form-item' id='prd_features_id' name='prd_features' initialValue={features}>
@@ -107,16 +129,16 @@ function ShowProductEssentialInfoDetail({product}) {
                         </Select>
                     </Form.Item>
                 </Descriptions.Item>
-                <Descriptions.Item label='판매 여부(화면 노출 여부)' span={1.5}>
+                <Descriptions.Item label='판매 여부' span={1.5}>
                     <Form.Item className='product-detail-form-item' id='prd_sale_yn_id' name='prd_sale_yn' initialValue={product.isSale}>
                         <Switch checkedChildren={<span>판매</span>} unCheckedChildren={<span>미판매</span>}/>
                     </Form.Item>
                 </Descriptions.Item>
                 <Descriptions.Item label='가격'>
-                    <InputNumber addonAfter="₩" min="0" stringMode defaultValue={product.price} onChange={changePrice}/>
+                    <InputNumber addonAfter="₩" min="0" stringMode defaultValue={product.price} onChange={changePrice} disabled={isShowProduct}/>
                 </Descriptions.Item>
                 <Descriptions.Item label='할인율'>
-                    <InputNumber addonAfter="%" min={0} max={100} parser={(value) => value?.replace('%', '')} defaultValue={product.discountRate} onChange={changeDiscountRate}/>
+                    <InputNumber addonAfter="%" min={0} max={100} parser={(value) => value?.replace('%', '')} defaultValue={product.discountRate} onChange={changeDiscountRate} disabled={isShowProduct} />
                 </Descriptions.Item>
                 <Descriptions.Item label='할인율 적용 금액'>
                     {finalPrice}₩
@@ -140,7 +162,7 @@ function ShowProductEssentialInfoDetail({product}) {
                                        },
                                    },
                                ]}>
-                        <ManageProductPointTag points={points} setPoints={setPoints} />
+                        <ManageProductPointTag points={points} setPoints={setPoints} disabled={isShowProduct} />
                     </Form.Item>
                 </Descriptions.Item>
                 <Descriptions.Item label={(<span>옵션<br /><Tag color={'gold'}>*대표 옵션</Tag></span>)} span={3}>
