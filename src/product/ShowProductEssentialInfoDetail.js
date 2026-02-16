@@ -1,12 +1,11 @@
 import {Button, DatePicker, Descriptions, Form, Input, InputNumber, Select, Switch, Tag} from "antd";
-import {DateTimeRangeFormat, ProductFeatures} from "../CommonConst";
+import {DateTimeRangeFormat, rangePresets, ProductFeatures} from "../CommonConst";
 import React, {useEffect, useState} from "react";
 import ShowProductOptionTag from "./ShowProductOptionTag";
 import axios from "axios";
 import {getResult} from "../AxiosResponse";
 import ManageProductPointTag from "./ManageProductPointTag";
 import type {ProductPoint} from "../CommonInterface";
-import {rangePresets} from "../CommonInterface";
 import dayjs from "dayjs";
 
 function ShowProductEssentialInfoDetail({product, isShowProduct}) {
@@ -26,6 +25,22 @@ function ShowProductEssentialInfoDetail({product, isShowProduct}) {
 
     // 할인율 적용 최종 금액
     const [finalPrice, setFinalPrice] = useState(0);
+
+    // Form 기본값 설정
+    const initFormValue = () => {
+        let value = {
+            'prd_dsp_dt': [dayjs(product.displayStartDate, DateTimeRangeFormat), dayjs(product.displayEndDate, DateTimeRangeFormat)],
+        }
+
+        if (product.orderDeadlineDate !== "") {
+            value = {
+                ...value,
+                'prd_ord_dead_dt': dayjs(product.orderDeadlineDate, DateTimeRangeFormat)
+            }
+        }
+
+        return value;
+    }
 
     useEffect(() => {
         // 금액, 할인율 달라질때마다 할인율 적용 금액 계산
@@ -84,9 +99,7 @@ function ShowProductEssentialInfoDetail({product, isShowProduct}) {
 
     return (
         <Form id={'prd-detail-form'} form={form}
-              initialValues={{
-                  'prd_dsp_dt': [dayjs(product.displayStartDate, DateTimeRangeFormat), dayjs(product.displayEndDate, DateTimeRangeFormat)]
-              }}
+              initialValues={initFormValue()}
               onFinish={onSubmit}>
             <Descriptions style={{marginBottom: 20}} bordered>
                 <Descriptions.Item label='상품 코드' span={3}>
@@ -110,10 +123,17 @@ function ShowProductEssentialInfoDetail({product, isShowProduct}) {
                 <Descriptions.Item label={(<span>서브 카테고리<br />*서브 카테고리는 수정 불가합니다.</span>)} span={1.5}>
                     <Select className='product-detail-form-select' defaultValue={product.subCategoryCode} disabled options={[{value: product.subCategoryCode, label: product.subCategoryName}]} />
                 </Descriptions.Item>
-                <Descriptions.Item label='상품 전시일' span={3}>
+                <Descriptions.Item label='상품 전시일'>
                     <Form.Item id='prd_dsp_dt_id' name='prd_dsp_dt'
                                rules={[{ type: 'array', required: true, message: '상품 전시일은 필수입니다!' }]}>
-                        <RangePicker showTime format={DateTimeRangeFormat} presets={rangePresets} disabled={isShowProduct} />
+                        <RangePicker showTime format={DateTimeRangeFormat} disabled={isShowProduct} />
+                    </Form.Item>
+                </Descriptions.Item>
+                <Descriptions.Item label='예약 마감일' span={2}>
+                    <Form.Item id='prd_ord_dead_dt_id' name='prd_ord_dead_dt'>
+                        <DatePicker
+                            minDate={dayjs(product.orderDeadlineDate, DateTimeRangeFormat)}
+                        />
                     </Form.Item>
                 </Descriptions.Item>
                 <Descriptions.Item label='태그(특징)' span={1.5}>

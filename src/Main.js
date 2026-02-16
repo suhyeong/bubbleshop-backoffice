@@ -6,7 +6,6 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
-import {MenuInfo} from "rc-menu/lib/interface";
 import ManageProduct from "./product/ManageProduct";
 import HealthCheck from "./HealthCheck";
 import ManageCategory from "./product/ManageCategory";
@@ -49,7 +48,7 @@ const items: MenuItem[] = [
     ])
 ];
 
-const getSelectedLabel = (key: MenuInfo) => {
+const getSelectedLabel = (key: any) => {
     let selectedMenuItem = items[0];
     const itemKey = key.key;
 
@@ -78,8 +77,8 @@ function Main() {
         token: { colorBgContainer },
     } = theme.useToken();
 
-    const handleClick = (menuInfo: MenuInfo) => {
-        const menuItem = getSelectedLabel(menuInfo);
+    const handleClick : MenuProps['onClick'] = (info) => {
+        const menuItem = getSelectedLabel(info);
         setSelectedMenu(menuItem);
     };
 

@@ -51,6 +51,7 @@ export interface Product {
     isSale: boolean,
     displayStartDate: string,
     displayEndDate: string,
+    orderDeadlineDate: string,
     imageList: ProductImage[],
     features: ProductFeature[],
     options: ProductOption[],

@@ -21,7 +21,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import {getResult} from "../AxiosResponse";
 import type {Review, ReviewResult} from "../CommonInterface";
-import {rangePresets} from "../CommonInterface";
+import {rangePresets} from "../CommonConst";
 
 const { Content } = Layout;
 const { RangePicker } = DatePicker;
