@@ -17,7 +17,6 @@ import {
 } from "antd";
 import axios from "axios";
 import type {Category, ProductPoint} from "../CommonInterface";
-import {rangePresets} from "../CommonInterface";
 import {DateTimeRangeFormat, ProductFeatures} from "../CommonConst";
 import "./AddProduct.css";
 import "../Main.css";
@@ -84,6 +83,7 @@ function AddProduct() {
                 detailImageName: detailImageFiles?.map(file => file.response.fileName),
                 displayStartDate: row['prd_dsp_dt'][0].format(DateTimeRangeFormat),
                 displayEndDate: row['prd_dsp_dt'][1].format(DateTimeRangeFormat),
+                orderDeadlineDate: row['prd_ord_dead_dt'].format(DateTimeRangeFormat)
             }
 
             // console.log(request);
@@ -171,14 +171,24 @@ function AddProduct() {
                                         </Select>
                                     </Form.Item>
                                 </Descriptions.Item>
-                                <Descriptions.Item label='상품 전시일' span={3}>
+                                <Descriptions.Item label='상품 전시일'>
                                     <Form.Item id='prd_dsp_dt_id' name='prd_dsp_dt'
                                                rules={[{ type: 'array', required: true, message: '상품 전시일은 필수입니다!' }]}>
                                         <RangePicker showTime
                                                      format={DateTimeRangeFormat}
-                                            presets={rangePresets}
-                                            minDate={dayjs().add(+1, 'd')}
+                                                     presets={[
+                                                         {
+                                                             label: <span aria-label="tomorrow to end of this year">내일~올해마지막날</span>,
+                                                             value: () => [dayjs().add(+1, 'd').startOf('day'), dayjs().endOf('year')], // 5.8.0+ support function
+                                                         },
+                                                     ]}
+                                            minDate={dayjs().add(+1, 'd').startOf('day')}
                                         />
+                                    </Form.Item>
+                                </Descriptions.Item>
+                                <Descriptions.Item label='예약 마감일' span={2}>
+                                    <Form.Item id='prd_ord_dead_dt_id' name='prd_ord_dead_dt'>
+                                        <DatePicker minDate={dayjs().add(+2, 'd')} />
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label='가격'>

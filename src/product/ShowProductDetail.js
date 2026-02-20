@@ -84,7 +84,7 @@ function ShowProductDetail() {
                 <div style={{background: colorBgContainer, borderRadius: borderRadiusLG}}>
                     <Card className='product-detail-card'
                           title={<Typography.Title level={2} style={{ margin: 3 }}>상품 상세 정보 🔍</Typography.Title>}>
-                        <Spin spinning={loading} tip="Loading" size="middle">
+                        <Spin spinning={loading} description="Loading" size="middle">
                             <Tabs
                                 type='card'
                                 size='large'
